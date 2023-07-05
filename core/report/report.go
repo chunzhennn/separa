@@ -18,7 +18,7 @@ type ResultUnit struct {
 	Services   []ServiceUnit
 	Deviceinfo string
 	Honeypot   []string
-	Timestap   string
+	Timestamp  string
 }
 
 type ServiceUnit struct {
@@ -39,7 +39,7 @@ func NewServiceUnit(port int, protocol string, serviceApp []string) *ServiceUnit
 func NewResultUnit() *ResultUnit {
 	currentTime := time.Now()
 	ResultUnit := &ResultUnit{
-		Timestap: currentTime.Format("2006-01-02 15:04:05"),
+		Timestamp: currentTime.Format("2006-01-02 15:04:05"),
 	}
 	return ResultUnit
 }
@@ -68,12 +68,12 @@ func AppendService(ip string, service *ServiceUnit) {
 }
 
 func Save() {
-	data, err := json.Marshal(ResultKV.KV)
+	data, err := json.MarshalIndent(ResultKV.KV, "", "    ")
 	if err != nil {
 		log.Log.Printf("Error: %s", err)
 		return
 	}
-	file, err := os.OpenFile(common.Setting.Output, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(common.Setting.Output, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Log.Printf("Error: %s", err)
 		return

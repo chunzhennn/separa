@@ -1,1 +1,29 @@
-{"16.163.13.0":{"Services":[{"Port":53,"Protocol":"dns","ServiceApp":null},{"Port":143,"Protocol":"imap","ServiceApp":null},{"Port":22,"Protocol":"ssh","ServiceApp":null}],"Deviceinfo":"","Honeypot":null,"Timestap":"2023-07-05 22:12:58"}}
+{
+    "16.163.13.0": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            },
+            {
+                "Port": 143,
+                "Protocol": "imap",
+                "ServiceApp": null
+            },
+            {
+                "Port": 106,
+                "Protocol": "pop3pw",
+                "ServiceApp": null
+            },
+            {
+                "Port": 6379,
+                "Protocol": "redis",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-05 22:18:03"
+    }
+}
