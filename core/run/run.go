@@ -1,12 +1,17 @@
 package run
 
 import (
+	"fmt"
+	"github.com/lcvvvv/appfinger"
 	"net"
+	"net/url"
 	"separa/common"
 	"separa/common/log"
 	"separa/common/uri"
 	"separa/core/report"
 	"separa/core/scanner"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -16,10 +21,11 @@ import (
 var (
 	IPScanner    *scanner.IPScanner
 	ProtoScanner *scanner.ProtoScanner
+	URLScanner   *scanner.URLScanner
 )
 
 const (
-	scannerNum = 2
+	scannerNum = 3
 )
 
 // main entry point
@@ -35,6 +41,8 @@ func Start(targets *[]string) {
 	go IPScanner.Run()
 	log.Log.Printf("ProtoScanner start")
 	go ProtoScanner.Run()
+	log.Log.Printf("URLScanner start")
+	go URLScanner.Run()
 	time.Sleep(time.Second * 1)
 
 	// distribute the target
@@ -99,8 +107,40 @@ func ProtoScannerInit(wg *sync.WaitGroup) {
 		} else {
 			protocol = gonmap.GuessProtocol(port)
 		}
+		URLRaw := fmt.Sprintf("%s://%s:%d", response.FingerPrint.Service, addr.String(), port)
+		URL, _ := url.Parse(URLRaw)
+		if appfinger.SupportCheck(URL.Scheme) == true {
+			URLScanner.Push(URL, response, nil, nil)
+			return
+		}
 		report.AppendService(addr.String(), report.NewServiceUnit(port, protocol, nil))
 	}
+}
+func URLScannerInit(wg *sync.WaitGroup) {
+	config := scanner.DefaultConfig()
+	config.Threads = config.Threads/2 + 1
+	URLScanner = scanner.NewURLScanner(config)
+	URLScanner.HandlerMatched = func(URL *url.URL, banner *appfinger.Banner, finger *appfinger.FingerPrint) {
+		host := URL.Hostname()
+		port := URL.Port()
+		scheme := URL.Scheme
+		if port == "" {
+			port = "80" // 默认端口号
+		}
+		iPort, _ := strconv.Atoi(port)
+		// 去除finger.ProductName里的 '\t'
+		var productName []string
+		for _, name := range finger.ProductName {
+			productName = append(productName, strings.ReplaceAll(name, "\t", ""))
+		}
+		report.AppendService(host, report.NewServiceUnit(iPort, scheme, productName))
+	}
+	URLScanner.HandlerError = func(url *url.URL, err error) {
+		log.Log.Fatalf("URLScanner Error: ", url.String(), err)
+	}
+	URLScanner.Defer(func() {
+		wg.Done()
+	})
 }
 
 func initialize(wg *sync.WaitGroup) {
@@ -108,6 +148,7 @@ func initialize(wg *sync.WaitGroup) {
 	common.ConfigInit()
 	IPScannerInit(wg)
 	ProtoScannerInit(wg)
+	URLScannerInit(wg)
 }
 
 func distributeTraget(targets *[]string) {
@@ -132,6 +173,10 @@ func checkStop() {
 		}
 		if !ProtoScanner.IsDone() {
 			continue
+		}
+		if URLScanner.RunningThreads() == 0 && !URLScanner.IsDone() {
+			URLScanner.Stop()
+			log.Log.Printf("URLScanner finish")
 		}
 	}
 }

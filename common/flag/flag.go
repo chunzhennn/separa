@@ -24,7 +24,7 @@ var Command struct {
 	ConfigFile string `help:"Config file to load, default is config.yaml in current dir." name:"config-file" type:"path" short:"c" default:"config.yaml"`
 
 	// Output file
-	OutputFile string `help:"Output file to save, default is output.txt in current dir." name:"output-file" type:"path" short:"o" default:"output.txt"`
+	OutputFile string `help:"Output file to save, default is output.json in current dir." name:"output-file" type:"path" short:"o" default:"output.json"`
 
 	// Port to scan
 	Port string `help:"Port to scan, default is TOP 1000. you can use ',' to split or '-' to range, like '80,443,22' or '1-65535'" name:"port" short:"p"`
