@@ -2,7 +2,6 @@ package run
 
 import (
 	"fmt"
-	"github.com/lcvvvv/appfinger"
 	"net"
 	"net/url"
 	"separa/common"
@@ -14,6 +13,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/lcvvvv/appfinger"
 
 	"github.com/lcvvvv/gonmap"
 )
@@ -136,7 +137,7 @@ func URLScannerInit(wg *sync.WaitGroup) {
 		report.AppendService(host, report.NewServiceUnit(iPort, scheme, productName))
 	}
 	URLScanner.HandlerError = func(url *url.URL, err error) {
-		log.Log.Fatalf("URLScanner Error: ", url.String(), err)
+		log.Log.Printf("URLScanner %s Error: %s", url.String(), err)
 	}
 	URLScanner.Defer(func() {
 		wg.Done()
