@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"separa/common"
 	"separa/common/log"
 	"time"
@@ -73,7 +74,17 @@ func Save() {
 		log.Log.Printf("Error: %s", err)
 		return
 	}
-	file, err := os.OpenFile(common.Setting.Output, os.O_CREATE|os.O_WRONLY, 0644)
+	path := filepath.FromSlash(common.Setting.Output)
+	dir := filepath.Dir(path)
+	_, err = os.Stat(dir)
+	if os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			log.Log.Printf("Error: %s", err)
+			return
+		}
+	}
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Log.Printf("Error: %s", err)
 		return
