@@ -2,3 +2,5 @@ vendor/
 separa.exe
 separa
 output.json
+.idea/
+outputs/
