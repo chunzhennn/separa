@@ -2,7 +2,6 @@ package scanner
 
 import (
 	"net"
-	"separa/common/log"
 
 	"github.com/lcvvvv/gonmap"
 )
@@ -34,12 +33,11 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 	ps.pool.Function = func(in interface{}) {
 		nmap := gonmap.New()
 		nmap.SetTimeout(config.Timeout)
-		if config.DeepInspection == true {
+		if config.DeepInspection {
 			nmap.OpenDeepIdentify()
 		}
 		value := in.(ipPort)
-		log.Log.Printf("scan %s:%d", value.addr.String(), value.port)
-		status, response := nmap.ScanTimeout(value.addr.String(), value.port, 10*config.Timeout)
+		status, response := nmap.ScanTimeout(value.addr.String(), value.port, 100*config.Timeout)
 		switch status {
 		case gonmap.Closed:
 			ps.HandlerClosed(value.addr, value.port)

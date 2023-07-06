@@ -1,5 +1,65 @@
 {
-    "16.163.13.0": {
+    "16.163.13.13": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:05"
+    },
+    "16.163.13.16": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:04"
+    },
+    "16.163.13.182": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:06"
+    },
+    "16.163.13.216": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:06"
+    },
+    "16.163.13.230": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:06"
+    },
+    "16.163.13.237": {
         "Services": [
             {
                 "Port": 53,
@@ -7,23 +67,71 @@
                 "ServiceApp": null
             },
             {
-                "Port": 143,
-                "Protocol": "imap",
+                "Port": 22,
+                "Protocol": "ssh",
                 "ServiceApp": null
             },
             {
-                "Port": 106,
-                "Protocol": "pop3pw",
-                "ServiceApp": null
-            },
-            {
-                "Port": 6379,
-                "Protocol": "redis",
+                "Port": 443,
+                "Protocol": "https",
                 "ServiceApp": null
             }
         ],
         "Deviceinfo": "",
         "Honeypot": null,
-        "Timestamp": "2023-07-05 22:18:03"
+        "Timestamp": "2023-07-06 10:31:05"
+    },
+    "16.163.13.31": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:05"
+    },
+    "16.163.13.52": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            },
+            {
+                "Port": 22,
+                "Protocol": "ssh",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:05"
+    },
+    "16.163.13.54": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:05"
+    },
+    "16.163.13.68": {
+        "Services": [
+            {
+                "Port": 53,
+                "Protocol": "dns",
+                "ServiceApp": null
+            }
+        ],
+        "Deviceinfo": "",
+        "Honeypot": null,
+        "Timestamp": "2023-07-06 10:31:05"
     }
 }

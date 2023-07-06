@@ -1,11 +1,29 @@
 package pool
 
 import (
+	"math/rand"
 	"separa/common/log"
+	"strconv"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+
+type Worker struct {
+	f func(interface{})
+}
+
+func generateWorker(f func(interface{})) *Worker {
+	return &Worker{
+		f: func(in interface{}) {
+			f(in)
+		},
+	}
+}
+
+func (t *Worker) run(in interface{}) {
+	t.f(in)
+}
 
 type Pool struct {
 	//母版函数
@@ -14,6 +32,8 @@ type Pool struct {
 	in chan interface{}
 	//size用来表明池的大小，不能超发。
 	threads int
+	//正在执行的任务清单
+	JobsList *sync.Map
 	//启动协程等待时间
 	Interval time.Duration
 	//正在工作的协程数量
@@ -28,6 +48,7 @@ type Pool struct {
 func New(threads int) *Pool {
 	return &Pool{
 		threads:  threads,
+		JobsList: &sync.Map{},
 		wg:       &sync.WaitGroup{},
 		in:       make(chan interface{}),
 		Function: nil,
@@ -54,6 +75,7 @@ func (p *Pool) Stop() {
 
 // Run the pool
 func (p *Pool) Run() {
+	p.Done = false
 	for i := 0; i < p.threads; i++ {
 		p.wg.Add(1)
 		time.Sleep(p.Interval)
@@ -67,7 +89,7 @@ func (p *Pool) Run() {
 
 // pool worker
 func (p *Pool) work() {
-	p.Done = false
+	var Tick string
 	var param interface{}
 
 	defer func() {
@@ -83,12 +105,20 @@ func (p *Pool) work() {
 			return
 		}
 		atomic.AddInt32(&p.active, 1)
-		go p.Function(param)
+		Tick = p.generateTick()
+		p.JobsList.Store(Tick, param)
+		f := generateWorker(p.Function)
+		f.run(param)
+		p.JobsList.Delete(Tick)
 		atomic.AddInt32(&p.active, -1)
 	}
 }
 
-// 获取线程数
+func (p *Pool) generateTick() string {
+	rand.Seed(time.Now().UnixNano())
+	return strconv.FormatInt(rand.Int63(), 10)
+}
+
 func (p *Pool) Threads() int {
 	return p.threads
 }

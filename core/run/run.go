@@ -35,6 +35,7 @@ func Start(targets *[]string) {
 	go IPScanner.Run()
 	log.Log.Printf("ProtoScanner start")
 	go ProtoScanner.Run()
+	time.Sleep(time.Second * 1)
 
 	// distribute the target
 	distributeTraget(&common.Setting.Target)
@@ -47,23 +48,38 @@ func Start(targets *[]string) {
 }
 
 func IPScannerInit(wg *sync.WaitGroup) {
-	IPScanner = scanner.NewIPScanner(scanner.DefaultConfig(), 16)
+	config := scanner.DefaultConfig()
+	config.Timeout = 200 * time.Millisecond
+	IPScanner = scanner.NewIPScanner(config, 255)
 	IPScanner.Defer(func() {
 		wg.Done()
 	})
 	IPScanner.HandlerActive = func(addr net.IP) {
 		log.Log.Printf("IPScanner active: %s", addr.String())
-
 		report.PushIP(addr.String())
 		for _, port := range common.Setting.Port {
 			ProtoScanner.Push(addr, port)
 		}
+	}
+}
 
+func getTimeout(i int) time.Duration {
+	switch {
+	case i > 10000:
+		return time.Millisecond * 200
+	case i > 5000:
+		return time.Millisecond * 300
+	case i > 1000:
+		return time.Millisecond * 400
+	default:
+		return time.Millisecond * 500
 	}
 }
 
 func ProtoScannerInit(wg *sync.WaitGroup) {
-	ProtoScanner = scanner.NewProtoScanner(scanner.DefaultConfig(), 16)
+	config := scanner.DefaultConfig()
+	config.Timeout = getTimeout(len(common.Setting.Port))
+	ProtoScanner = scanner.NewProtoScanner(config, 800)
 	ProtoScanner.Defer(func() {
 		wg.Done()
 	})
@@ -74,8 +90,15 @@ func ProtoScannerInit(wg *sync.WaitGroup) {
 	}
 
 	ProtoScanner.HandlerMatched = func(addr net.IP, port int, response *gonmap.Response) {
-		log.Log.Printf("ProtoScanner matched: %s:%d", addr.String(), port)
-		protocol := gonmap.GuessProtocol(port)
+		// log.Log.Printf("ProtoScanner matched: %s:%d", addr.String(), port)
+		// log.Log.Printf("ProtoScanner matched:%+v", response.FingerPrint)
+		// log.Log.Printf("ProtoScanner matched:%+v", response)
+		var protocol string
+		if response.FingerPrint.Service != "" {
+			protocol = response.FingerPrint.Service
+		} else {
+			protocol = gonmap.GuessProtocol(port)
+		}
 		report.AppendService(addr.String(), report.NewServiceUnit(port, protocol, nil))
 	}
 }
@@ -95,14 +118,20 @@ func distributeTraget(targets *[]string) {
 
 func checkStop() {
 	for {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 10)
 		if IPScanner.RunningThreads() == 0 && !IPScanner.IsDone() {
 			IPScanner.Stop()
 			log.Log.Printf("IPScanner finish")
 		}
+		if !IPScanner.IsDone() {
+			continue
+		}
 		if ProtoScanner.RunningThreads() == 0 && !ProtoScanner.IsDone() {
 			ProtoScanner.Stop()
 			log.Log.Printf("ProtoScanner finish")
+		}
+		if !ProtoScanner.IsDone() {
+			continue
 		}
 	}
 }

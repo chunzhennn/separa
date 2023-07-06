@@ -16,6 +16,7 @@ func NewIPScanner(config *Config, threads int) (ips *IPScanner) {
 	ips = &IPScanner{
 		client:        newConfig(config, threads),
 		HandlerActive: func(addr net.IP) {},
+		HandlerDie:    func(addr net.IP) {},
 	}
 	ips.pool.Function = func(in interface{}) {
 		ip := in.(net.IP)

@@ -17,6 +17,6 @@ func DefaultConfig() *Config {
 		Timeout:            time.Second * 2,
 		Threads:            800,
 		Interval:           time.Millisecond * 300,
-		HostDiscoverClosed: true,
+		HostDiscoverClosed: false,
 	}
 }
