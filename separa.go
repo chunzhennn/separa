@@ -2,24 +2,25 @@ package main
 
 import (
 	"embed"
-	"github.com/lcvvvv/appfinger"
 	"separa/common/flag"
 	"separa/common/log"
 	"separa/core/run"
 	"time"
+
+	"github.com/lcvvvv/appfinger"
 )
 
-//go:embed static/fingerprint.txt
+//go:embed static/merge.txt
 var fingerprintEmbed embed.FS
 
-const fingerprintPath = "static/fingerprint.txt"
+const fingerprintPath = "static/merge.txt"
 
 func main() {
 	startTime := time.Now()
 	// initialize the fingerprint
 	fs, _ := fingerprintEmbed.Open(fingerprintPath)
 	if n, err := appfinger.InitDatabaseFS(fs); err != nil {
-		log.Log.Fatalf("指纹库加载失败，请检查【fingerprint.txt】文件", err)
+		log.Log.Fatalf("指纹库加载失败，请检查【fingerprint.txt】文件 %w", err)
 	} else {
 		log.Log.Printf("成功加载HTTP指纹:[%d]条", n)
 	}

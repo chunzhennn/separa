@@ -129,11 +129,37 @@ func URLScannerInit(wg *sync.WaitGroup) {
 			port = "80" // 默认端口号
 		}
 		iPort, _ := strconv.Atoi(port)
-		// 去除finger.ProductName里的 '\t'
+
+		// 去重处理
+		productMap := make(map[string]string)
+
 		var productName []string
 		for _, name := range finger.ProductName {
-			productName = append(productName, strings.ReplaceAll(name, "\t", ""))
+			// 去除finger.ProductName里的 '\t' 并小写
+			name = strings.ToLower(strings.ReplaceAll(name, "\t", ""))
+			// 可能有 version 信息
+			index := strings.LastIndex(name, "/")
+			// 如果 version 为空，则默认为 N
+			version := "N"
+			prod := name
+			if index != -1 {
+				prod = name[:index]
+				version = name[index+1:]
+			}
+
+			// 如果 productMap 中已经存在 prod，则比较 version 是否为 N，为 N 且新的不为 N 则替换
+			_, ok := productMap[prod]
+			if ok && productMap[prod] != "N" {
+				continue
+			}
+			productMap[prod] = version
 		}
+
+		for k, v := range productMap {
+			name := k + "/" + v
+			productName = append(productName, name)
+		}
+
 		report.AppendService(host, report.NewServiceUnit(iPort, scheme, productName))
 	}
 	URLScanner.HandlerError = func(url *url.URL, err error) {
