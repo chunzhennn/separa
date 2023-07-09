@@ -11,7 +11,7 @@ func fingerScan(result *pkg.Result) {
 	//如果是http协议,则判断cms,如果是tcp则匹配规则库.暂时不考虑udp
 	if result.IsHttp {
 		sender := func(sendData []byte) ([]byte, bool) {
-			conn := result.GetHttpConn(RunOpt.Delay)
+			conn := result.GetHttpConn(2)
 			url := result.GetURL() + string(sendData)
 			resp, err := conn.Get(url)
 			if err == nil {
@@ -28,7 +28,7 @@ func fingerScan(result *pkg.Result) {
 			return
 		}
 		sender := func(sendData []byte) ([]byte, bool) {
-			conn, err := pkg.NewSocket("tcp", result.GetTarget(), RunOpt.Delay/2+1)
+			conn, err := pkg.NewSocket("tcp", result.GetTarget(), 2/2+1)
 			if err != nil {
 				return nil, false
 			}

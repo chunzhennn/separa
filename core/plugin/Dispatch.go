@@ -78,5 +78,4 @@ func Dispatch(result *pkg.Result) {
 		}
 	}
 	result.Title = iutils.AsciiEncode(result.Title)
-	return
 }

@@ -1,0 +1,44 @@
+- name: HFish
+  rule:
+    - regexps:
+        body:
+          - /static/x.js
+- name: glastopf
+  rule:
+    - regexps:
+        body:
+          - Please post your comments for the blog
+          - Blog Comments
+- name: elastichoney
+  rule:
+    - regexps:
+        body:
+          - Green Goblin
+          - 89d3241d670db65f994242c8e838b169779e2d4
+- name: Amun
+  rule:
+    - regexps:
+        body:
+          - johan83@freenet.de
+          - tim.bohn@gmx.net
+- name: elasticpot
+  rule:
+    - regexps:
+        body:
+          - db18744ea5570fa9bf868df44fecd4b58332ff24
+          - 1cf0aa9d61f185b59f643939f862c01f89b21360
+- name: kippo
+  rule:
+    - regexps:
+        body:
+          - 'SSH Honeypot Type: Kippo'
+- name: whoisscanme
+  rule:
+    - regexps:
+        body:
+          - whoisscanme:https://github.com/bg6cq/whoisscanme
+- name: weblogic
+  rule:
+    - regexps:
+        header:
+          - "Content-Length: 1165"

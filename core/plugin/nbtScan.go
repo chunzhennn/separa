@@ -60,7 +60,7 @@ func nbtScan(result *pkg.Result) {
 	result.Port = "137"
 	target := result.GetTarget()
 
-	conn, err := pkg.NewSocket("udp", target, RunOpt.Delay*2)
+	conn, err := pkg.NewSocket("udp", target, 2*2)
 	if err != nil {
 		return
 	}

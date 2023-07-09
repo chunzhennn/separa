@@ -1,30 +1,30 @@
-- name: linksys-vpn
+- name: vpn/linksys-vpn
   rule:
     - regexps:
         header:
           - linksys-vpn
-- name: cisco_vpn
+- name: vpn/cisco_vpn
   rule:
     - regexps:
         header:
           - webvpn
-- name: o2security_vpn
+- name: vpn/o2security_vpn
   rule:
     - regexps:
         header:
           - client_param=install_active
-- name: 网御星云vpn
+- name: vpn/网御星云vpn
   rule:
     - regexps:
         body:
           - /ssl/down/usbkey.exe
           - /js/leadsec.js
-- name: citrix-web-pn-server
+- name: vpn/citrix-web-pn-server
   rule:
     - regexps:
         body:
           - Citrix Web PN Server
-- name: juniper_vpn
+- name: vpn/juniper_vpn
   rule:
     - regexps:
         body:
@@ -37,7 +37,7 @@
         body:
           - login_psw.csp
           - EasyConnect
-- name: citrix/netscaler vpn
+- name: vpn/netscaler vpn
   rule:
     - regexps:
         body:
@@ -49,60 +49,60 @@
         body:
           - new_style/deepblue.css
           - admin/js/json2.js
-- name: h3c-am8000
+- name: gateway/h3c-am8000
   rule:
     - regexps:
         body:
           - AM8000
-- name: 汉柏安全网关
+- name: gateway/汉柏安全网关
   rule:
     - regexps:
         body:
           - OPZOON
-- name: 360企业版
+- name: security/360企业版
   rule:
     - regexps:
         body:
           - 360EntWebAdminMD5Secret
-- name: h3c公司产品
+- name: security/h3c公司产品
   rule:
     - regexps:
         body:
           - <title>Web managerment Home
           - .h3c.com
           - service@h3c.com
-- name: h3c网络设备
+- name: security/h3c网络设备
   rule:
     - regexps:
         body:
           - libs/MulPlatAPI.js
-- name: h3c icg 1000
+- name: security/h3c icg 1000
   rule:
     - regexps:
         body:
           - ICG 1000系统管理
-- name: citrix-metaframe
+- name: router/citrix-metaframe
   rule:
     - regexps:
         body:
           - window.location="/Citrix/MetaFrame
-- name: cisco_epc3925
+- name: router/cisco_epc3925
   rule:
     - regexps:
         body:
           - Docsis_system
-- name: cisco asr
+- name: router/cisco asr
   rule:
     - regexps:
         body:
           - CISCO ASR
 
-- name: huawei_srg2220
+- name: router/huawei_srg2220
   rule:
     - regexps:
         body:
           - HUAWEI SRG2220
-- name: huawei_router
+- name: router/huawei_router
   default_port:
     - '8443'
   rule:
@@ -112,7 +112,7 @@
       favicon:
         mmh3:
           - '-1395400951'
-- name: 深信服edr
+- name: security/深信服edr
   focus: true
   rule:
     - regexps:
@@ -122,73 +122,73 @@
       favicon:
         md5:
           - 0b24d4d5c7d300d50ee1cd96059a9e85
-- name: 华为 netopen
+- name: other/华为 netopen
   rule:
     - regexps:
         body:
           - /netopen/theme/css/inFrame.css
-- name: nagios
+- name: other/nagios
   rule:
     - regexps:
         header:
           - Nagios Access
 
-- name: citrix-access-gateway
+- name: gateway/citrix-access-gateway
   rule:
     - regexps:
         body:
           - Citrix Access Gateway
-- name: 华为 mcu
+- name: other/华为 mcu
   rule:
     - regexps:
         body:
           - McuR5-min.js
 
-- name: citrix-xenserver
+- name: other/citrix-xenserver
   rule:
     - regexps:
         body:
           - Citrix Systems, Inc. XenServer
 
-- name: cisco-router
+- name: router/cisco-router
   rule:
     - regexps:
         body:
           - Cisco Systems Login
-- name: synology-router
+- name: router/synology-router
   rule:
     - regexps:
         body:
           - synologyrouter
 
-- name: h3c-secblade-firewall
+- name: security/h3c-secblade-firewall
   rule:
     - regexps:
         body:
           - js/MulPlatAPI.js
-- name: citrix_netscaler
+- name: security/citrix_netscaler
   rule:
     - regexps:
         body:
           - ns_af
-- name: 深信服防火墙类产品
+- name: security/深信服防火墙类产品
   rule:
     - regexps:
         body:
           - SANGFOR FW
-- name: citrix-confproxy
+- name: proxy server/citrix-confproxy
   rule:
     - regexps:
         body:
           - confproxy
 
-- name: 华为（huawei）安全设备
+- name: security/华为（huawei）安全设备
   rule:
     - regexps:
         body:
           - sweb-lib/resource/
 
-- name: 绿盟下一代防火墙
+- name: security/绿盟下一代防火墙
   rule:
     - regexps:
         body:
@@ -198,25 +198,25 @@
     - regexps:
         body:
           - NS-CACHE
-- name: 华为（huawei）secoway设备
+- name: security/华为（huawei）secoway设备
   rule:
     - regexps:
         body:
           - Secoway
-- name: 深信服上网行为管理系统
+- name: security/深信服上网行为管理系统
   rule:
     - regexps:
         md5:
           - d8de64b0ca4281380295aa23500267ca
       send_data: /login/img/product_logo.png
-- name: 锐捷eweb
+- name: router/锐捷eweb
   focus: true
   rule:
     - regexps:
         body:
           - pub/ui/rui-min.css
           - NBR路由器
-- name: 锐捷ap
+- name: router/锐捷ap
   focus: true
   rule:
     - regexps:
@@ -309,7 +309,7 @@
     - regexps:
         body:
           - iepngfix_tilebg.js
-- name: 群晖nas
+- name: storage/群晖nas
   rule:
     - regexps:
         body:
@@ -487,7 +487,7 @@
         body:
           - This site is running
           - TeamViewer
-- name: 天融信vpn
+- name: vpn/天融信vpn
   focus: true
   rule:
     - regexps:
@@ -505,14 +505,14 @@
     - regexps:
         header:
           - X-Powered-By-Anquanbao
-- name: 海康威视ivms
+- name: webcam/海康威视ivms
   focus: true
   rule:
     - regexps:
         body:
           - g_szCacheTime
           - iVMS
-- name: hikvision摄像头
+- name: webcam/hikvision摄像头
   focus: true
   rule:
     - regexps:
@@ -532,7 +532,7 @@
           - 科来网络回溯
           - 科来软件 版权所有
           - i18ninit.min.js
-- name: 网神vpn
+- name: vpn/网神vpn
   focus: true
   rule:
     - regexps:
@@ -563,23 +563,23 @@
         body:
           - 金山
           - 猎鹰安全
-- name: 网御waf设备
+- name: security/网御waf设备
   rule:
     - regexps:
         body:
           - <div id="divLogin">
           - 网御WAF
-- name: 网御上网行为管理系统
+- name: security/网御上网行为管理系统
   rule:
     - regexps:
         body:
           - Leadsec ACM
-- name: array_vpn
+- name: vpn/array_vpn
   rule:
     - regexps:
         body:
           - an_util.js
-- name: fortinet VPN
+- name: vpn/fortinet VPN
   rule:
     - favicon:
         mmh3:
@@ -587,7 +587,7 @@
     - regexps:
         header:
           - xxxxxxxx-xxxxx
-- name: fortinet firewall
+- name: vpn/fortinet firewall
   rule:
     - regexps:
         body:

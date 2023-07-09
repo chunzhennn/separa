@@ -31253,7 +31253,6 @@ zkteco公司产品	Body="/media/images/ZKECO16.ico" || Header="sessionidadms" ||
 锐捷应用控制引擎	Body="window.open(\"/login.do\",\"airWin" || Title="锐捷应用控制引擎"
 长城软件 增值税发票综合服务平台	Header="长城软件 增值税发票综合服务平台" || Title="长城软件 增值税发票综合服务平台"
 阿里云CDN	Header="cdn.aliyuncs.com"||Body="cdn.aliyuncs.com"
-随风PHP分类信息程序	Header="X-Powered-By: PHP"
 青岛积成电子 燃气SCADA监控平台	Header="青岛积成电子 燃气SCADA监控平台" || Title="青岛积成电子 燃气SCADA监控平台"
 青果软件	Title="KINGOSOFT" || Body="SetKingoEncypt.jsp" || Body="/jkingo.js"
 风渡科技ASP网上购物系统	Header="X-Powered-By: ASP"

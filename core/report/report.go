@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"separa/common"
 	"separa/common/log"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,15 @@ type ServiceUnit struct {
 	Port       int
 	Protocol   string
 	ServiceApp []string
+}
+
+func AttachVersion(app string) (string, string) {
+	mayBeVersion := strings.Split(app, "/")
+	if len(mayBeVersion) > 1 {
+		return mayBeVersion[0], mayBeVersion[1]
+	} else {
+		return mayBeVersion[0], "N"
+	}
 }
 
 func NewServiceUnit(port int, protocol string, serviceApp []string) *ServiceUnit {
@@ -66,6 +76,17 @@ func AppendService(ip string, service *ServiceUnit) {
 		ResultKV.KV[ip].Services = make([]ServiceUnit, 0)
 	}
 	ResultKV.KV[ip].Services = append(ResultKV.KV[ip].Services, *service)
+}
+
+func AppendHonypot(ip string, honeypot string) {
+	if ResultKV.KV[ip].Honeypot == nil {
+		ResultKV.KV[ip].Honeypot = make([]string, 0)
+	}
+	ResultKV.KV[ip].Honeypot = append(ResultKV.KV[ip].Honeypot, honeypot)
+}
+
+func UpdateDeviceinfo(ip string, deviceinfo string) {
+	ResultKV.KV[ip].Deviceinfo = deviceinfo
 }
 
 func Save() {

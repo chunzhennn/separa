@@ -35,7 +35,7 @@ func NewIPScanner(config *Config, threads int) (ips *IPScanner) {
 		}
 		ips.HandlerDie(ip)
 	}
-	return
+	return ips
 }
 
 func (c *IPScanner) Push(ips ...net.IP) {

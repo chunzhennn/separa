@@ -13,7 +13,7 @@ var snmpPublicData = parsers.UnHexlify("302902010104067075626c6963a01c02049acb04
 
 func snmpScan(result *pkg.Result) {
 	result.Port = "161"
-	conn, err := pkg.NewSocket("udp", result.GetTarget(), RunOpt.Delay)
+	conn, err := pkg.NewSocket("udp", result.GetTarget(), 2)
 	if err != nil {
 		result.Error = err.Error()
 		return
