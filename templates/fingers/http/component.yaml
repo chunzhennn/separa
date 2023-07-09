@@ -1,0 +1,365 @@
+- name: nginx
+  rule:
+    - regexps:
+        header:
+          - nginx
+#        body:
+#          - nginx
+- name: nginx_admin
+  rule:
+    - regexps:
+        header:
+          - nginx admin
+- name: shiro
+  focus: true
+  rule:
+    - regexps:
+        header:
+          - rememberMe=
+- name: ajaxpro
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - ajaxpro
+- name: ueditor
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - ueditor.all
+          - ueditor.config.js
+      send_data: /ueditor
+- name: sourcemap
+  rule:
+    - regexps:
+        vuln:
+          - .js.map
+      info: sourcemap-leak
+- name: webpack
+  rule:
+    - regexps:
+        body:
+          - chunk-vendors
+          - 'webpack://'
+#- name: readme.md
+#  rule:
+#    - regexps:
+#        vuln:
+#          - 'github.com'
+#      send_data: /README.md
+#      info: README leak
+- name: swagger
+  focus: true
+  rule:
+    - regexps:
+        vuln:
+          - Swagger UI
+      send_data: /swagger-ui.html
+      info: swagger leak
+- name: swagger-ui
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - /swagger
+- name: druid
+  focus: true
+  rule:
+    - regexps:
+        vuln:
+          - Druid Stat Index
+        body:
+          - druid/login.html
+          - druid.login
+      send_data: /druid/index.html
+      info: druid leak
+#- name: composer.json
+#  rule:
+#    - regexps:
+#        vuln:
+#          - '"require": '
+#      send_data: /composer.json
+#      info: composer leak
+#- name: license
+#  rule:
+#    - regexps:
+#        vuln:
+#          - copyleft
+#      send_data: /LICENSE
+#      info: LICENSE leak
+- name: thymeleaf
+  rule:
+    - regexps:
+        body:
+          - thymeleaf
+- name: iis
+  rule:
+    - regexps:
+        body:
+          - Bad Request (Invalid Hostname)
+        vuln:
+          - '- /</title>'
+        regexp:
+          - 'IIS\/([\d\.]{3,4})'
+      info: Directory traversal
+      favicon:
+        md5:
+          - 825af13371930eeb2f85cf075fa25b68
+- name: struts2
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - org.apache.struts2
+          - struts.devMode
+          - struts-tags
+          - Action mapped for namespace
+          - .action
+- name: springboot
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - Whitelabel Error Page
+          - No message available
+          - '{"timestamp":'
+- name: springcloud-function
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - '"error":"Internal Server Error"'
+      send_data: /functionRouter
+- name: spring
+  focus: true
+  rule:
+    - regexps:
+        header:
+          - springframework
+- name: spring-cloud-hystrix
+  focus: true
+  default_port:
+    - '2001'
+  rule:
+    - regexps:
+        header:
+          - hystrix-dashboard
+        body:
+          - hystrix
+- name: springsecurity
+  rule:
+    - regexps:
+        body:
+          - Full authentication is required
+- name: frp
+  rule:
+    - regexps:
+        body:
+          - Faithfully yours, frp
+- name: tomcat
+  rule:
+    - regexps:
+        regexp:
+          - <h3>Apache Tomcat/(.*)</h3>
+          - <title>Apache Tomcat/(.*)</title>
+        header:
+          - Apache-Coyote
+      favicon:
+        md5:
+          - 4644f2d45601037b8423d45e13194c93
+
+- name: directory
+  rule:
+    - regexps:
+        vuln:
+          - Directory Listing For
+  info: Directory traversal
+
+- name: apache
+  rule:
+    - regexps:
+        vuln:
+          - Index of /
+      info: Directory traversal
+- name: .net
+  rule:
+    - regexps:
+        body:
+          - content="Visual Basic
+- name: ntlm认证
+  rule:
+    - regexps:
+        header:
+          - NTLM
+- name: oracle-application-server
+  rule:
+    - regexps:
+        header:
+          - Oracle-Application-Server
+- name: redhat
+  rule:
+    - regexps:
+        header:
+          - Red Hat
+- name: redmine
+  rule:
+    - regexps:
+        body:
+          - Redmine
+          - authenticity_token
+      favicon:
+        mmh3:
+          - '603314'
+- name: resin
+  rule:
+    - regexps:
+        header:
+          - 'Server: Resin'
+- name: solr
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - Solr Admin
+          - SolrCore Initialization Failures
+          - app_config.solr_path
+- name: tengine
+  rule:
+    - regexps:
+        header:
+          - Tengine
+- name: vue
+  rule:
+    - favicon:
+        mmh3:
+          - '-1237480336'
+        md5:
+          - 67d34b0decfd4d725d1c1f2eeadc4756
+- name: f5bigip
+  level: 1
+  rule:
+    - favicon:
+        mmh3:
+          - '878647854'
+          - '-335242539'
+          - '-1581907337'
+        md5:
+          - 04d9541338e525258daf47cc844d59f3
+      regexps:
+        header:
+          - X-PvInfo
+          - BigIP
+- name: f5bigip-console
+  focus: true
+  rule:
+    - regexps:
+        vuln:
+          - BIG-IP&reg; Configuration Utility
+      send_data: /tmui/login.jsp
+      info: bigip_console_leak
+- name: jetty
+  rule:
+    - regexps:
+        header:
+          - Jetty
+        body:
+          - Powered by Jetty
+      favicon:
+        mmh3:
+          - '-629047854'
+- name: Oauth2
+  rule:
+    - regexps:
+        header:
+          - bearer
+        body:
+          - bearer
+- name: 金蝶eas
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - easSessionId
+- name: 金蝶apusic
+  focus: true
+  rule:
+    - regexps:
+        header:
+          - Apusic
+        body:
+          - "-Error report"
+- name: glassfish
+  rule:
+    - regexps:
+        header:
+          - 'Server: GlassFish Server'
+- name: jeecg
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - jeecg
+- name: telerik
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - telerik
+- name: fckeditor
+  rule:
+    - regexps:
+        body:
+          - FCKeditor
+- name: fckeditor
+  rule:
+    - regexps:
+        body:
+          - FCKeditor
+- name: tapestry
+  rule:
+    - regexps:
+        body:
+          - tapestry
+- name: upload-form
+  rule:
+    - regexps:
+        body:
+          - type="file"
+- name: xampp
+  rule:
+    - favicon:
+        mmh3:
+          - '-1437701105'
+- name: lanmp集成环境
+  rule:
+    - regexps:
+        body:
+          - <title>LANMP
+- name: 宝塔面板
+  default_port:
+    - '8888'
+  rule:
+    - regexps:
+        body:
+          - app.bt.cn/static/app.png
+          - 安全入口校验失败
+- name: 宝塔
+  rule:
+    - regexps:
+        body:
+          - 恭喜，站点创建成功
+          - 没有找到站点
+      favicon:
+        md5:
+          - 3c3804ddad747313df58112a3e1bc680
+- name: lnmp
+  rule:
+    - regexps:
+        body:
+          - lnmp.gif
+- name: pythonSimpleHTTP
+  rule:
+    - regexps:
+        header:
+          - SimpleHTTP/

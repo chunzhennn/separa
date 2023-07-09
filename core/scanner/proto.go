@@ -2,6 +2,9 @@ package scanner
 
 import (
 	"net"
+	"separa/core/plugin"
+	"separa/pkg"
+	"strconv"
 
 	"github.com/lcvvvv/gonmap"
 )
@@ -31,23 +34,10 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 		HandlerError:      func(addr net.IP, port int, err error) {},
 	}
 	ps.pool.Function = func(in interface{}) {
-		nmap := gonmap.New()
-		nmap.SetTimeout(config.Timeout)
-		if config.DeepInspection {
-			nmap.OpenDeepIdentify()
-		}
 		value := in.(ipPort)
-		status, response := nmap.ScanTimeout(value.addr.String(), value.port, 100*config.Timeout)
-		switch status {
-		case gonmap.Closed:
-			ps.HandlerClosed(value.addr, value.port)
-		case gonmap.Open:
-			ps.HandlerOpen(value.addr, value.port)
-		case gonmap.NotMatched:
-			ps.HandlerNotMatched(value.addr, value.port, response.Raw)
-		case gonmap.Matched:
-			ps.HandlerMatched(value.addr, value.port, response)
-		}
+		result := pkg.NewResult(value.addr.String(), strconv.Itoa(value.port))
+		plugin.Dispatch(result)
+		println(result.FullOutput())
 	}
 	return
 }
