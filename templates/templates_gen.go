@@ -199,7 +199,7 @@ func main() {
 			s.WriteString(fmt.Sprintf("else if typ==\"%s\"{\n\t\treturn files.UnFlate(parsers.Base64Decode(\"%s\"))\n\t}", n, parser(n)))
 		}
 	}
-	template := `package common
+	template := `package pkg
 
 import (
 	"github.com/chainreactors/files"

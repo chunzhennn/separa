@@ -3900,15 +3900,6 @@
         body:
           - O2OA
           - o2_core
-- name: Fortinet Fortigate SSL VPN
-  rule:
-    - favicon:
-        mmh3:
-          - '945408572'
-      regexps:
-        body:
-          - location="/remote/login"
-          - /remote/login?lang=
 - name: Pulse Secure SSL VPN
   rule:
     - regexps:

@@ -1,4 +1,4 @@
-//go:generate go run templates/templates_gen.go -t templates -o common/templates.go
+//go:generate go run templates/templates_gen.go -t templates -o pkg/templates.go
 package main
 
 import (

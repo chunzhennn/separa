@@ -36,3 +36,9 @@ Flags:
 ```sh
 ./separa.exe -t 16.163.13.0
 ```
+
+
+## TODO
+service_app 空为 null
+json文件重命名
+协议识别

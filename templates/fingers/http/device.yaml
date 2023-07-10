@@ -30,7 +30,7 @@
         body:
           - welcome.cgi?p=logo
           - /images/logo_juniper_reversed.gif
-- name: 深信服ssl-vpn
+- name: vpn/深信服ssl-vpn
   focus: true
   rule:
     - regexps:
@@ -586,8 +586,8 @@
           - '945408572'
     - regexps:
         header:
-          - xxxxxxxx-xxxxx
-- name: vpn/fortinet firewall
+          - Fortinet VPN
+- name: security/fortinet firewall
   rule:
     - regexps:
         body:
@@ -720,3 +720,12 @@
         body:
           - FortiGate
           - app-id=1157004084, app-argument={{::host_addr}}
+- name: vpn/Fortinet Fortigate SSL VPN
+  rule:
+    - favicon:
+        mmh3:
+          - '945408572'
+      regexps:
+        body:
+          - location="/remote/login"
+          - /remote/login?lang=

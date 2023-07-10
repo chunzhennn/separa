@@ -17,16 +17,16 @@ var ResultKV struct {
 }
 
 type ResultUnit struct {
-	Services   []ServiceUnit
-	Deviceinfo string
-	Honeypot   []string
-	Timestamp  string
+	Services   []ServiceUnit `json:"services"`
+	Deviceinfo string        `json:"deviceinfo"`
+	Honeypot   []string      `json:"honeypot"`
+	Timestamp  string        `json:"timestamp"`
 }
 
 type ServiceUnit struct {
-	Port       int
-	Protocol   string
-	ServiceApp []string
+	Port       int      `json:"port"`
+	Protocol   string   `json:"protocol"`
+	ServiceApp []string `json:"service_app"`
 }
 
 func AttachVersion(app string) (string, string) {

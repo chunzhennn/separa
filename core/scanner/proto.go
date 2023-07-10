@@ -53,6 +53,7 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 		if result.Open {
 			log.Log.Printf(result.FullOutput())
 			port, _ := strconv.Atoi(result.Port)
+			Protocol := result.Protocol
 
 			app := make(map[string]string, 0)
 			// 遍历所有的指纹信息
@@ -69,12 +70,29 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 					// 如果该指纹信息是设备，那么就更新设备信息
 					if tag == "device" {
 						report.UpdateDeviceinfo(result.Ip, v.Name)
+						continue
 					}
 				}
 				// 如果是蜜罐，那么就跳过后续加入到 serviceApp 中
 				if isHonypot {
 					continue
 				}
+
+				// 增加协议相关内容
+				if v.Name == "ssh" || v.Name == "telnet" || v.Name == "ftp" ||
+					v.Name == "rdp" || v.Name == "vnc" || v.Name == "mysql" ||
+					v.Name == "mssql" || v.Name == "postgresql" || v.Name == "redis" ||
+					v.Name == "memcache" || v.Name == "mongodb" || v.Name == "elasticsearch" ||
+					v.Name == "pop3" || v.Name == "smtp" || v.Name == "imap" || v.Name == "ldap" ||
+					v.Name == "smb" || v.Name == "jndi" {
+					Protocol = v.Name
+				}
+
+				// 特判一些情况
+				if result.Port != "22" && Protocol == "ssh" {
+					report.AppendHonypot(result.Ip, result.Port+"/kippo")
+				}
+
 				if v.Version != "" {
 					app[v.Name] = v.Version
 				} else {
@@ -119,7 +137,7 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 			for k, v := range app {
 				appVec = append(appVec, k+"/"+v)
 			}
-			service := report.NewServiceUnit(port, result.Protocol, appVec)
+			service := report.NewServiceUnit(port, Protocol, appVec)
 			report.AppendService(result.Ip, service)
 		}
 	}
