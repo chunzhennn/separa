@@ -73,13 +73,10 @@ func initScan(result *pkg.Result) {
 
 		bs, err = conn.Read(1)
 		if err != nil {
-			senddataStr := fmt.Sprintf("GET /%s HTTP/1.1\r\nHost: %s\r\n\r\n", result.Uri, target)
-			bs, err = conn.Request([]byte(senddataStr), 4096)
-			if err != nil {
-				result.Error = err.Error()
-			}
+			systemHttp(result, "http")
+		} else {
+			pkg.CollectSocketInfo(result, bs)
 		}
-		pkg.CollectSocketInfo(result, bs)
 	}
 
 	//所有30x,400,以及非http协议的开放端口都送到http包尝试获取更多信息
@@ -102,11 +99,15 @@ func systemHttp(result *pkg.Result, scheme string) {
 		uri := string(location[1])
 		if !strings.HasPrefix(uri, "http") {
 			target += uri
+		} else {
+			target = uri
 		}
 	}
 
 	// target += uri
-	// fmt.Printf("redirect to %s ", target)
+	if RunOpt.Debug {
+		fmt.Printf("redirect to %s\n", target)
+	}
 
 	conn := result.GetHttpConn(RunOpt.Delay + RunOpt.HttpsDelay)
 	req, _ := http.NewRequest("GET", target, nil)

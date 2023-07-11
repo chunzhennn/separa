@@ -31,10 +31,12 @@
   rule:
     - regexps:
         regexp:
-          - wp-util\.min\.js\?ver=([0-9\.]+)
+          - wordpress ([0-9\.]+)
+          - wp-includes/css/dashicons.min.css\?ver=([0-9\.]+)
         body:
           - wp-content
           - /wp-includes/
+          - wordpress
 - name: ubuntu
   rule:
     - regexps:
@@ -138,6 +140,6 @@
   rule:
     - regexps:
         regexp:
-          - 'version":"([0-9\.]+)"}'
+          - 'version":"([0-9\.]+)"},'
         body:
           - Grafana

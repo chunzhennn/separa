@@ -3,7 +3,10 @@ package report
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"testing"
+
+	"gopkg.in/yaml.v2"
 )
 
 func TestJson(t *testing.T) {
@@ -24,4 +27,27 @@ func TestJson(t *testing.T) {
 
 	// 打印序列化后的 JSON 字符串
 	fmt.Println(string(data))
+}
+
+type config struct {
+	Name    string `yaml:"name"`
+	Version string `yaml:"version"`
+	Author  string `yaml:"author"`
+}
+
+func TestYaml(t *testing.T) {
+
+	// 将 YAML 格式的文本写入文件
+	content, err := ioutil.ReadFile("config.yaml")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var cfg config
+	err = yaml.Unmarshal(content, &cfg)
+	fmt.Printf("%s\n", cfg.Name)
+	fmt.Printf("%s\n", cfg.Author)
+	fmt.Printf("%s\n", cfg.Version)
+	// fmt.Println("Config file written successfully.")
+
 }

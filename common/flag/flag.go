@@ -28,6 +28,12 @@ var Command struct {
 
 	// Port to scan
 	Port string `help:"Port to scan, default is TOP 1000. you can use ',' to split or '-' to range, like '80,443,22' or '1-65535'" name:"port" short:"p"`
+
+	// Delay
+	Delay int `help:"Delay between each request " name:"delay" short:"d" default:"5"`
+
+	// Top N ports to scan
+	Top int `help:"Top N ports to scan, default is 1000" name:"top" short:"n" default:"1000"`
 }
 
 func CheckTarget() {

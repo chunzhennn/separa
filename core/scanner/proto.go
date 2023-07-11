@@ -56,7 +56,10 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 			log.Log.Printf(s)
 			// fmt.Printf("Result: %+v\n", result)
 			// if len(result.Content) < 100 {
-			fmt.Print(string(result.Content))
+			if plugin.RunOpt.Debug {
+				fmt.Print(string(result.Content))
+			}
+
 			// }
 
 			port, _ := strconv.Atoi(result.Port)
