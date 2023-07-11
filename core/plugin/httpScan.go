@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"separa/pkg"
@@ -95,10 +96,17 @@ func systemHttp(result *pkg.Result, scheme string) {
 
 	// 如果是400或者不可识别协议,则使用https
 	target := scheme + "://" + result.GetTarget()
+	re, _ := regexp.Compile("location: (.*)\r\n")
+	location := re.FindSubmatch(result.Content)
+	if len(location) > 1 {
+		uri := string(location[1])
+		if !strings.HasPrefix(uri, "http") {
+			target += uri
+		}
+	}
 
-	//if RunOpt.SuffixStr != "" {
-	//	target += "/" + RunOpt.SuffixStr
-	//}
+	// target += uri
+	// fmt.Printf("redirect to %s ", target)
 
 	conn := result.GetHttpConn(RunOpt.Delay + RunOpt.HttpsDelay)
 	req, _ := http.NewRequest("GET", target, nil)

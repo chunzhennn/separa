@@ -127,3 +127,17 @@
           - 'lucene_version":"([0-9\.]+)"'
         body:
           - elasticsearch
+- name: Jetty
+  rule:
+    - regexps:
+        regexp:
+          - Jetty\(([0-9\.]+[0-9]+)
+        header:
+          - Jetty
+- name: grafana
+  rule:
+    - regexps:
+        regexp:
+          - 'version":"([0-9\.]+)"}'
+        body:
+          - Grafana
