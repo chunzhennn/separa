@@ -33,5 +33,5 @@ if __name__ == '__main__':
             bin_path = win_bin
         elif system == 'Linux':
             bin_path = linux_bin
-        command = [bin_path, "-t", target, "-o", output]
+        command = [bin_path, "-t", target, "-o", output, "-d", "5", "-n", "800"]
         subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

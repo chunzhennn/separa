@@ -122,7 +122,7 @@ func watchDog() {
 
 func checkStop() {
 	for {
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 2)
 		if IPScanner.RunningThreads() == 0 && !IPScanner.IsDone() {
 			IPScanner.Stop()
 			log.Log.Printf("IPScanner finish")

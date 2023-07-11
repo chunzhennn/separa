@@ -224,12 +224,12 @@
           - JDWP-Handshake
       send_data: JDWP-Handshake\n
       info: jdwp_service
-- name: webcam/dahua
-  protocol: tcp
-  rule:
-    - regexps:
-        body:
-          - dahua
+# - name: webcam/dahua
+#   protocol: tcp
+#   rule:
+#     - regexps:
+#         body:
+#           - dahua
 - name: weblogic
   default_port:
     - '7001'

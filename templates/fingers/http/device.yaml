@@ -752,3 +752,16 @@
     - regexps:
         body:
           - cisco
+- name: webcam/dahua
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - dahua
+          - idx_radio_singleManExp
+- name: Nas/synology
+  focus: true
+  rule:
+    - regexps:
+        body:
+          - synology

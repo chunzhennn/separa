@@ -126,7 +126,7 @@
   rule:
     - regexps:
         regexp:
-          - 'lucene_version":"([0-9\.]+)"'
+          - '"number" : "([0-9\.]+)"'
         body:
           - elasticsearch
 - name: Jetty
@@ -143,3 +143,8 @@
           - 'version":"([0-9\.]+)"},'
         body:
           - Grafana
+- name: rabbitmq
+  rule:
+    - regexps:
+        body:
+          - rabbitmq

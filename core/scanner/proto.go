@@ -88,7 +88,7 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 					}
 					// 如果该指纹信息是设备，那么就更新设备信息
 					if tag == "device" {
-						report.UpdateDeviceinfo(result.Ip, name)
+						report.AppendDeviceinfo(result.Ip, name)
 						jump = true
 						break
 					}

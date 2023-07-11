@@ -18,7 +18,7 @@ var ResultKV struct {
 
 type ResultUnit struct {
 	Services   []ServiceUnit `json:"services"`
-	Deviceinfo string        `json:"deviceinfo"`
+	Deviceinfo []string      `json:"deviceinfo"`
 	Honeypot   []string      `json:"honeypot"`
 	Timestamp  string        `json:"timestamp"`
 }
@@ -39,12 +39,20 @@ func AttachVersion(app string) (string, string) {
 }
 
 func NewServiceUnit(port int, protocol string, serviceApp []string) *ServiceUnit {
-	ServiceUnit := &ServiceUnit{
-		Port:       port,
-		Protocol:   protocol,
-		ServiceApp: serviceApp,
+	if len(serviceApp) > 0 {
+		ServiceUnit := &ServiceUnit{
+			Port:       port,
+			Protocol:   protocol,
+			ServiceApp: serviceApp,
+		}
+		return ServiceUnit
+	} else {
+		ServiceUnit := &ServiceUnit{
+			Port:     port,
+			Protocol: protocol,
+		}
+		return ServiceUnit
 	}
-	return ServiceUnit
 }
 
 func NewResultUnit() *ResultUnit {
@@ -85,8 +93,16 @@ func AppendHonypot(ip string, honeypot string) {
 	ResultKV.KV[ip].Honeypot = append(ResultKV.KV[ip].Honeypot, honeypot)
 }
 
-func UpdateDeviceinfo(ip string, deviceinfo string) {
-	ResultKV.KV[ip].Deviceinfo = deviceinfo
+func AppendDeviceinfo(ip string, deviceinfo string) {
+	if ResultKV.KV[ip].Deviceinfo == nil {
+		ResultKV.KV[ip].Deviceinfo = make([]string, 0)
+	}
+	for _, v := range ResultKV.KV[ip].Deviceinfo {
+		if v == deviceinfo {
+			return
+		}
+	}
+	ResultKV.KV[ip].Deviceinfo = append(ResultKV.KV[ip].Deviceinfo, deviceinfo)
 }
 
 func Save() {

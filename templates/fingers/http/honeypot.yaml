@@ -1,0 +1,11 @@
+- name: glastopf
+  rule:
+    - regexps:
+        body:
+          - Please post your comments for the blog
+          - Blog Comments
+- name: HFish
+  rule:
+    - regexps:
+        body:
+          - /static/x.js
