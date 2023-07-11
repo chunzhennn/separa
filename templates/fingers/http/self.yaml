@@ -3,6 +3,7 @@
     - regexps:
         regexp:
           - Apache/([0-9\.]+)
+          - Apache-Coyote/([0-9\.]+)
         header:
           - Apache
 - name: Nginx
@@ -34,3 +35,95 @@
         body:
           - wp-content
           - /wp-includes/
+- name: ubuntu
+  rule:
+    - regexps:
+        header:
+          - ubuntu
+- name: centos
+  rule:
+    - regexps:
+        header:
+          - centos
+- name: node.js
+  rule:
+    - regexps:
+        header:
+          - 'x-powered-by: express'
+          - pump.io
+          - node.js
+        body:
+          - node.js
+- name: express
+  rule:
+    - regexps:
+        header:
+          - 'x-powered-by: express'
+- name: windows
+  rule:
+    - regexps:
+        header:
+          - windows
+          - microsoft
+        body:
+          - win32
+          - win64
+- name: iis
+  rule:
+    - regexps:
+        regexp:
+          - Microsoft-IIS/([0-9\.]+)
+        header:
+          - microsoft-iis
+        body:
+          - microsoft-iis
+- name: java
+  rule:
+    - regexps:
+        header:
+          - JSESSIONID
+- name: asp.net
+  rule:
+    - regexps:
+        header:
+          - ASP.NET_SessionId
+- name: micro_httpd
+  rule:
+    - regexps:
+        header:
+          - micro_httpd
+- name: openresty
+  rule:
+    - regexps:
+        regexp:
+          - openresty/([0-9\.]+)
+        header:
+          - openresty
+        body:
+          - openresty
+- name: Microsoft-HTTPAPI
+  rule:
+    - regexps:
+        regexp:
+          - Microsoft-HTTPAPI/([0-9\.]+)
+        header:
+          - Microsoft-HTTPAPI
+- name: debian
+  rule:
+    - regexps:
+        regexp:
+          - debian/([0-9\.]+)
+        header:
+          - debian
+- name: LiteSpeed
+  rule:
+    - regexps:
+        header:
+          - LiteSpeed
+- name: elasticsearch
+  rule:
+    - regexps:
+        regexp:
+          - 'lucene_version":"([0-9\.]+)"'
+        body:
+          - elasticsearch

@@ -67,9 +67,9 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 			// 遍历所有的指纹信息
 			for _, v := range result.Frameworks {
 				// 如果是猜测的，那么就跳过
-				if v.IsGuess() {
-					continue
-				}
+				// if v.IsGuess() {
+				// 	continue
+				// }
 
 				name := strings.ToLower(v.Name)
 				// version := v.Version
@@ -100,12 +100,12 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 					Protocol = "ssh"
 				}
 
-				if name == "ssh" || name == "telnet" || name == "ftp" ||
-					name == "rdp" || name == "vnc" || name == "mysql" ||
+				if name == "ssh" || name == "telnet" || name == "ftp" || name == "socks4" ||
+					name == "rdp" || name == "vnc" || name == "mysql" || name == "socks5" ||
 					name == "mssql" || name == "postgresql" || name == "redis" ||
-					name == "memcache" || name == "mongodb" || name == "elasticsearch" ||
+					name == "memcache" || name == "mongodb" ||
 					name == "pop3" || name == "smtp" || name == "imap" || name == "ldap" ||
-					name == "smb" || name == "jndi" {
+					name == "smb" || name == "jndi" || name == "rtsp" || name == "weblogic" {
 					Protocol = name
 					continue
 				}
