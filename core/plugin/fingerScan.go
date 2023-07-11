@@ -1,17 +1,17 @@
 package plugin
 
 import (
-	"separa/pkg"
+	. "separa/pkg"
 	"separa/pkg/fingers"
 
 	"github.com/chainreactors/parsers"
 )
 
-func fingerScan(result *pkg.Result) {
+func fingerScan(result *Result) {
 	//如果是http协议,则判断cms,如果是tcp则匹配规则库.暂时不考虑udp
 	if result.IsHttp {
 		sender := func(sendData []byte) ([]byte, bool) {
-			conn := result.GetHttpConn(2)
+			conn := result.GetHttpConn(RunOpt.Delay)
 			url := result.GetURL() + string(sendData)
 			resp, err := conn.Get(url)
 			if err == nil {
@@ -21,14 +21,14 @@ func fingerScan(result *pkg.Result) {
 			}
 		}
 
-		getFramework(result, pkg.HttpFingers, sender)
+		getFramework(result, HttpFingers, sender)
 	} else {
-		if pkg.Proxy != nil {
+		if Proxy != nil {
 			// 如果存在http代理，跳过tcp指纹识别
 			return
 		}
 		sender := func(sendData []byte) ([]byte, bool) {
-			conn, err := pkg.NewSocket("tcp", result.GetTarget(), 2/2+1)
+			conn, err := NewSocket("tcp", result.GetTarget(), RunOpt.Delay/2+1)
 			if err != nil {
 				return nil, false
 			}
@@ -41,14 +41,14 @@ func fingerScan(result *pkg.Result) {
 			return data, true
 		}
 
-		getFramework(result, pkg.TcpFingers, sender)
+		getFramework(result, TcpFingers, sender)
 	}
 	return
 }
 
-func getFramework(result *pkg.Result, fingermap fingers.FingerMapper, sender func(sendData []byte) ([]byte, bool)) {
+func getFramework(result *Result, fingermap fingers.FingerMapper, sender func(sendData []byte) ([]byte, bool)) {
 	// 优先匹配默认端口,第一次循环只匹配默认端口
-	var matcher func(result *pkg.Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln)
+	var matcher func(result *Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln)
 	if result.IsHttp {
 		matcher = httpFingerMatch
 	} else {
@@ -94,7 +94,7 @@ func getFramework(result *pkg.Result, fingermap fingers.FingerMapper, sender fun
 	return
 }
 
-func httpFingerMatch(result *pkg.Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln) {
+func httpFingerMatch(result *Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln) {
 	frame, vuln, ok := fingers.FingerMatcher(finger, result.ContentMap(), RunOpt.VersionLevel, sender)
 	if ok {
 		if len(frame.Data) != 0 {
@@ -105,7 +105,7 @@ func httpFingerMatch(result *pkg.Result, finger *fingers.Finger, sender func(sen
 	return nil, nil
 }
 
-func tcpFingerMatch(result *pkg.Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln) {
+func tcpFingerMatch(result *Result, finger *fingers.Finger, sender func(sendData []byte) ([]byte, bool)) (*parsers.Framework, *parsers.Vuln) {
 	frame, vuln, ok := fingers.FingerMatcher(finger, result.ContentMap(), RunOpt.VersionLevel, sender)
 	if ok {
 		return frame, vuln

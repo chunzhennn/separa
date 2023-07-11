@@ -6,6 +6,7 @@ import (
 	"separa/common"
 	"separa/common/log"
 	"separa/common/uri"
+	"separa/core/plugin"
 	"separa/core/report"
 	"separa/core/scanner"
 	"separa/pkg"
@@ -92,6 +93,11 @@ func initialize(wg *sync.WaitGroup) {
 	IPScannerInit(wg)
 	ProtoScannerInit(wg)
 
+	// plugin.Delay = 5
+	plugin.RunOpt.Delay = 5
+	plugin.RunOpt.HttpsDelay = 5
+	plugin.RunOpt.Debug = true
+	plugin.RunOpt.HttpsDelay = 5
 	pkg.LoadPortConfig()
 	pkg.LoadExtractor()
 	pkg.AllHttpFingers = pkg.LoadFinger("http")

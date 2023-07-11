@@ -1,0 +1,7 @@
+- name: Apache
+  rule:
+    - regexps:
+        regexp:
+          - Apache/(\d+\.\d+\.\d+)
+        header:
+          - Apache

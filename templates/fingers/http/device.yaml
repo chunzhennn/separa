@@ -729,3 +729,8 @@
         body:
           - location="/remote/login"
           - /remote/login?lang=
+- name: firewall/pfsense
+  rule:
+    - regexps:
+        body:
+          - pfSense-logo

@@ -15,7 +15,7 @@ var data = pkg.Decode("YmXgZhZgYGCoYNBgYGZgYNghsAPEZWAEY0aGBSAGAwPDAQjlBiJYYju6X
 func wmiScan(result *pkg.Result) {
 	result.Port = "135"
 	target := result.GetTarget()
-	conn, err := pkg.NewSocket("tcp", target, 2)
+	conn, err := pkg.NewSocket("tcp", target, RunOpt.Delay)
 	if err != nil {
 		return
 	}

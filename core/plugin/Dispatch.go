@@ -46,6 +46,14 @@ func Dispatch(result *pkg.Result) {
 		return
 	} else if result.Port == "445" || result.Port == "smb" {
 		smbScan(result)
+		if RunOpt.Exploit == "ms17010" {
+			ms17010Scan(result)
+		} else if RunOpt.Exploit == "smbghost" || RunOpt.Exploit == "cve-2020-0796" {
+			smbGhostScan(result)
+		} else if RunOpt.Exploit == "auto" || RunOpt.Exploit == "smb" {
+			ms17010Scan(result)
+			smbGhostScan(result)
+		}
 		return
 	} else {
 		initScan(result)
@@ -77,5 +85,7 @@ func Dispatch(result *pkg.Result) {
 			result.GuessFramework()
 		}
 	}
+
 	result.Title = iutils.AsciiEncode(result.Title)
+	return
 }

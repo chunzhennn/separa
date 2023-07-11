@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/chainreactors/files"
+	"github.com/chainreactors/parsers"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
-
-	"github.com/chainreactors/files"
-	"github.com/chainreactors/parsers"
 	"sigs.k8s.io/yaml"
+	"strings"
 )
 
 var (

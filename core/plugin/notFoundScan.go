@@ -2,8 +2,8 @@ package plugin
 
 import (
 	"bytes"
-	"separa/pkg"
 
+	"separa/pkg"
 	"separa/pkg/fingers"
 
 	"github.com/chainreactors/logs"
@@ -12,7 +12,7 @@ import (
 )
 
 func NotFoundScan(result *pkg.Result) {
-	conn := result.GetHttpConn(2)
+	conn := result.GetHttpConn(RunOpt.Delay)
 	url := result.GetURL() + pkg.RandomDir
 	resp, err := conn.Get(url)
 

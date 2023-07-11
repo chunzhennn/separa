@@ -22,7 +22,7 @@ func initScan(result *pkg.Result) {
 	target := result.GetTarget()
 	if pkg.ProxyUrl != nil && strings.HasPrefix(pkg.ProxyUrl.Scheme, "http") {
 		// 如果是http代理, 则使用http库代替socket
-		conn := result.GetHttpConn(2)
+		conn := result.GetHttpConn(RunOpt.Delay)
 		req, _ := http.NewRequest("GET", "http://"+target, nil)
 		resp, err := conn.Do(req)
 		if err != nil {
@@ -32,8 +32,8 @@ func initScan(result *pkg.Result) {
 		result.Open = true
 		pkg.CollectHttpInfo(result, resp)
 	} else {
-		conn, err := pkg.NewSocket("tcp", target, 2)
-		//conn, err := pkg.TcpSocketConn(target, 2)
+		conn, err := pkg.NewSocket("tcp", target, RunOpt.Delay)
+		//conn, err := pkg.TcpSocketConn(target, RunOpt.Delay)
 		if err != nil {
 			// return open: 0, closed: 1, filtered: 2, noroute: 3, denied: 4, down: 5, error_host: 6, unkown: -1
 			errMsg := err.Error()
@@ -100,7 +100,7 @@ func systemHttp(result *pkg.Result, scheme string) {
 	//	target += "/" + RunOpt.SuffixStr
 	//}
 
-	conn := result.GetHttpConn(2 + 2)
+	conn := result.GetHttpConn(RunOpt.Delay + RunOpt.HttpsDelay)
 	req, _ := http.NewRequest("GET", target, nil)
 	req.Header = headers
 
@@ -138,7 +138,7 @@ func systemHttp(result *pkg.Result, scheme string) {
 // 302跳转后目的不可达时进行不redirect的信息收集
 // 暂时使用不太优雅的方案, 在极少数情况下才会触发, 会多进行一次https的交互.
 func noRedirectHttp(result *pkg.Result, req *http.Request) {
-	conn := pkg.HttpConnWithNoRedirect(2 + 2)
+	conn := pkg.HttpConnWithNoRedirect(RunOpt.Delay + RunOpt.HttpsDelay)
 	req.Header = headers
 	resp, err := conn.Do(req)
 	if err != nil {

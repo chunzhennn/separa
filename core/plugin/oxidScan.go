@@ -13,7 +13,7 @@ var oxid2 = pkg.Decode("YmVgYBZgYGCQYGBgYGSAAVYGAAAAAP//")
 func oxidScan(result *pkg.Result) {
 	result.Port = "135"
 	target := result.GetTarget()
-	conn, err := pkg.NewSocket("tcp", target, 2)
+	conn, err := pkg.NewSocket("tcp", target, RunOpt.Delay)
 	if err != nil {
 		result.Error = err.Error()
 		return
