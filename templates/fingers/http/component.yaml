@@ -1,8 +1,8 @@
-- name: nginx
-  rule:
-    - regexps:
-        header:
-          - nginx
+# - name: nginx
+#   rule:
+#     - regexps:
+#         header:
+#           - nginx
 #        body:
 #          - nginx
 - name: nginx_admin

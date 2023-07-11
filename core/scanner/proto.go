@@ -9,7 +9,9 @@ import (
 	"separa/core/report"
 	"separa/pkg"
 	"strconv"
+	"strings"
 
+	"github.com/chainreactors/logs"
 	"github.com/lcvvvv/appfinger"
 )
 
@@ -50,11 +52,12 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 		plugin.Dispatch(result)
 		// 如果扫到东西了
 		if result.Open {
-			// s := fmt.Sprintf("[+] %s\tMidware: %s\tLanguage: %s\tFrameworks: %s\tHost: %s [status: %s] Title: %s %s\n", result.GetURL(), result.Midware, result.Language, logs.Blue(result.Frameworks.String()), result.Host, logs.Yellow(result.Status), logs.Blue(result.Title), logs.Red(result.Vulns.String()))
-			// log.Log.Printf(s)
-			println(result.FullOutput())
+			s := fmt.Sprintf("[+] %s\tMidware: %s\tLanguage: %s\tFrameworks: %s\tHost: %s [status: %s] Title: %s %s\n", result.GetURL(), result.Midware, result.Language, logs.Blue(result.Frameworks.String()), result.Host, logs.Yellow(result.Status), logs.Blue(result.Title), logs.Red(result.Vulns.String()))
+			log.Log.Printf(s)
 			// fmt.Printf("Result: %+v\n", result)
-			// fmt.Print(string(result.Content))
+			// if len(result.Content) < 100 {
+			fmt.Print(string(result.Content))
+			// }
 
 			port, _ := strconv.Atoi(result.Port)
 			Protocol := result.Protocol
@@ -68,7 +71,7 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 					continue
 				}
 
-				// name := v.Name
+				name := strings.ToLower(v.Name)
 				// version := v.Version
 
 				jump := false
@@ -76,13 +79,13 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 				for _, tag := range v.Tags {
 					// 如果该指纹信息是蜜罐，那么就添加进 honypot
 					if tag == "honeypot" {
-						report.AppendHonypot(result.Ip, result.Port+"/"+v.Name)
+						report.AppendHonypot(result.Ip, result.Port+"/"+name)
 						jump = true
 						break
 					}
 					// 如果该指纹信息是设备，那么就更新设备信息
 					if tag == "device" {
-						report.UpdateDeviceinfo(result.Ip, v.Name)
+						report.UpdateDeviceinfo(result.Ip, name)
 						jump = true
 						break
 					}
@@ -92,36 +95,40 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 					continue
 				}
 
-				// 增加协议相关内容
-				if v.Name == "ssh" || v.Name == "telnet" || v.Name == "ftp" ||
-					v.Name == "rdp" || v.Name == "vnc" || v.Name == "mysql" ||
-					v.Name == "mssql" || v.Name == "postgresql" || v.Name == "redis" ||
-					v.Name == "memcache" || v.Name == "mongodb" || v.Name == "elasticsearch" ||
-					v.Name == "pop3" || v.Name == "smtp" || v.Name == "imap" || v.Name == "ldap" ||
-					v.Name == "smb" || v.Name == "jndi" {
-					Protocol = v.Name
+				// 更新协议相关内容
+				if name == "openssh" {
+					Protocol = "ssh"
+				}
+
+				if name == "ssh" || name == "telnet" || name == "ftp" ||
+					name == "rdp" || name == "vnc" || name == "mysql" ||
+					name == "mssql" || name == "postgresql" || name == "redis" ||
+					name == "memcache" || name == "mongodb" || name == "elasticsearch" ||
+					name == "pop3" || name == "smtp" || name == "imap" || name == "ldap" ||
+					name == "smb" || name == "jndi" {
+					Protocol = name
 					continue
 				}
 
 				if v.Version != "" {
-					app[v.Name] = v.Version
+					app[name] = v.Version
 				} else {
-					app[v.Name] = "N"
+					app[name] = "N"
 				}
 			}
 			// 添加语言信息
-			if result.Language != "" {
-				name, version := report.AttachVersion(result.Language)
-				app[name] = version
-			}
-			if result.Midware != "" {
-				name, version := report.AttachVersion(result.Midware)
-				app[name] = version
-			}
-			if result.Os != "" {
-				name, version := report.AttachVersion(result.Os)
-				app[name] = version
-			}
+			// if result.Language != "" {
+			// 	name, version := report.AttachVersion(result.Language)
+			// 	app[name] = version
+			// }
+			// if result.Midware != "" {
+			// 	name, version := report.AttachVersion(result.Midware)
+			// 	app[name] = version
+			// }
+			// if result.Os != "" {
+			// 	name, version := report.AttachVersion(result.Os)
+			// 	app[name] = version
+			// }
 			// 对于 http, https 协议使用 appFinger 补充指纹信息
 			// finger := AppFingerParse(result)
 			// if finger != nil {

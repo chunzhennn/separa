@@ -81,14 +81,16 @@
     - regexps:
         regexp:
           - RFB 00
-- name: ssh
+- name: openssh
   default_port:
     - ssh
-  protocol: tcp
+  protocol: ssh
   rule:
     - regexps:
-        body:
-          - SSH-
+        regexp:
+          - openssh_([0-9\.]+)
+        # body:
+        #   - SSH-(.*)
 - name: rsync
   default_port:
     - '873'

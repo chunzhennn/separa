@@ -1,0 +1,36 @@
+- name: Apache
+  rule:
+    - regexps:
+        regexp:
+          - Apache/([0-9\.]+)
+        header:
+          - Apache
+- name: Nginx
+  rule:
+    - regexps:
+        regexp:
+          - Nginx/([0-9\.]+)
+        header:
+          - Nginx
+- name: openssl
+  rule:
+    - regexps:
+        regexp:
+          - OpenSSL/([0-9\.]+)
+        header:
+          - OpenSSL
+- name: php
+  rule:
+    - regexps:
+        regexp:
+          - PHP/([0-9\.]+)
+        header:
+          - phpsessid
+- name: Wordpress
+  rule:
+    - regexps:
+        regexp:
+          - wp-util\.min\.js\?ver=([0-9\.]+)
+        body:
+          - wp-content
+          - /wp-includes/

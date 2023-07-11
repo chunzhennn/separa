@@ -93,11 +93,9 @@ func initialize(wg *sync.WaitGroup) {
 	IPScannerInit(wg)
 	ProtoScannerInit(wg)
 
-	// plugin.Delay = 5
-	plugin.RunOpt.Delay = 5
-	plugin.RunOpt.HttpsDelay = 5
+	plugin.RunOpt.Delay = 6
+	plugin.RunOpt.HttpsDelay = 10
 	plugin.RunOpt.Debug = true
-	plugin.RunOpt.HttpsDelay = 5
 	pkg.LoadPortConfig()
 	pkg.LoadExtractor()
 	pkg.AllHttpFingers = pkg.LoadFinger("http")

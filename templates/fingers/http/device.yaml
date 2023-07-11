@@ -733,4 +733,4 @@
   rule:
     - regexps:
         body:
-          - pfSense-logo
+          - pfSense

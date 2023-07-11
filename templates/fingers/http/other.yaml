@@ -5844,14 +5844,6 @@
     - regexps:
         header:
           - 'X-Powered-Cms: WMSN'
-- name: wordpress
-  rule:
-    - regexps:
-        body:
-          - content="WordPress
-          - /wp-includes/
-        header:
-          - /xmlrpc.php
 - name: wordpress_qtranslate
   rule:
     - regexps:
