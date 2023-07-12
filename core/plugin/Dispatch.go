@@ -30,29 +30,29 @@ func Dispatch(result *pkg.Result) {
 	}()
 	atomic.AddInt32(&RunOpt.Sum, 1)
 	if result.Port == "137" || result.Port == "nbt" {
-		nbtScan(result)
+		// nbtScan(result)
 		return
 	} else if result.Port == "135" || result.Port == "wmi" {
-		wmiScan(result)
+		// wmiScan(result)
 		return
 	} else if result.Port == "oxid" {
-		oxidScan(result)
+		// oxidScan(result)
 		return
 	} else if result.Port == "icmp" || result.Port == "ping" {
 		icmpScan(result)
 		return
 	} else if result.Port == "snmp" || result.Port == "161" {
-		snmpScan(result)
+		// snmpScan(result)
 		return
 	} else if result.Port == "445" || result.Port == "smb" {
-		smbScan(result)
+		// smbScan(result)
 		if RunOpt.Exploit == "ms17010" {
-			ms17010Scan(result)
+			// ms17010Scan(result)
 		} else if RunOpt.Exploit == "smbghost" || RunOpt.Exploit == "cve-2020-0796" {
-			smbGhostScan(result)
+			// smbGhostScan(result)
 		} else if RunOpt.Exploit == "auto" || RunOpt.Exploit == "smb" {
-			ms17010Scan(result)
-			smbGhostScan(result)
+			// ms17010Scan(result)
+			// smbGhostScan(result)
 		}
 		return
 	} else {

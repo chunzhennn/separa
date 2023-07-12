@@ -155,6 +155,7 @@ func (r *Regexps) Compile() error {
 			return err
 		}
 		r.CompliedRegexp = append(r.CompliedRegexp, creg)
+		r.CompiledVersionRegexp = append(r.CompiledVersionRegexp, creg)
 	}
 
 	for _, reg := range r.Vuln {

@@ -56,7 +56,7 @@ func IPScannerInit(wg *sync.WaitGroup) {
 	IPScanner = scanner.NewIPScanner(config, 255)
 	IPScanner.HandlerActive = func(addr net.IP) {
 		log.Log.Printf("IPScanner active: %s", addr.String())
-		report.PushIP(addr.String())
+		// report.PushIP(addr.String())
 		for _, port := range common.Setting.Port {
 			ProtoScanner.Push(addr, port)
 		}

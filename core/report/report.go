@@ -80,6 +80,11 @@ func Get(ip string) *ResultUnit {
 }
 
 func AppendService(ip string, service *ServiceUnit) {
+
+	if ResultKV.KV[ip] == nil {
+		ResultKV.KV[ip] = NewResultUnit()
+	}
+
 	if ResultKV.KV[ip].Services == nil {
 		ResultKV.KV[ip].Services = make([]ServiceUnit, 0)
 	}
@@ -87,6 +92,11 @@ func AppendService(ip string, service *ServiceUnit) {
 }
 
 func AppendHonypot(ip string, honeypot string) {
+
+	if ResultKV.KV[ip] == nil {
+		ResultKV.KV[ip] = NewResultUnit()
+	}
+
 	if ResultKV.KV[ip].Honeypot == nil {
 		ResultKV.KV[ip].Honeypot = make([]string, 0)
 	}
@@ -94,6 +104,11 @@ func AppendHonypot(ip string, honeypot string) {
 }
 
 func AppendDeviceinfo(ip string, deviceinfo string) {
+
+	if ResultKV.KV[ip] == nil {
+		ResultKV.KV[ip] = NewResultUnit()
+	}
+
 	if ResultKV.KV[ip].Deviceinfo == nil {
 		ResultKV.KV[ip].Deviceinfo = make([]string, 0)
 	}

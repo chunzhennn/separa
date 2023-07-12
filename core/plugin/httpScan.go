@@ -98,6 +98,9 @@ func systemHttp(result *pkg.Result, scheme string) {
 	if len(location) > 1 {
 		uri := string(location[1])
 		if !strings.HasPrefix(uri, "http") {
+			if !strings.HasPrefix(uri, "/") {
+				uri = "/" + uri
+			}
 			target += uri
 		} else {
 			target = uri
@@ -112,16 +115,23 @@ func systemHttp(result *pkg.Result, scheme string) {
 	conn := result.GetHttpConn(RunOpt.Delay + RunOpt.HttpsDelay)
 	req, _ := http.NewRequest("GET", target, nil)
 	req.Header = headers
-
 	resp, err := conn.Do(req)
 	if err != nil {
+		if RunOpt.Debug {
+			fmt.Printf("request %s , %s\n", target, err.Error())
+		}
 		// 有可能存在漏网之鱼, 是tls服务, 但tls的第一个响应为30x, 并30x的目的地址不可达或超时. 则会报错.
 		result.Error = err.Error()
-		logs.Log.Debugf("request %s , %s ", target, err.Error())
 		noRedirectHttp(result, req)
 		return
 	}
-	logs.Log.Debugf("request %s , %d ", target, resp.StatusCode)
+	if RunOpt.Debug {
+		fmt.Printf("request %s , %d\n", target, resp.StatusCode)
+	}
+	if resp.StatusCode == 101 {
+		result.Protocol = "websocket"
+		return
+	}
 	if resp.TLS != nil {
 		if result.Status == "400" || (resp.Request.Response != nil && resp.Request.Response.StatusCode != 302) || resp.Request.Response == nil {
 			// 1. 如果第一个包的状态码为400, 且这个包存在tls, 则判断为https
@@ -140,6 +150,9 @@ func systemHttp(result *pkg.Result, scheme string) {
 	}
 
 	result.Error = ""
+	if RunOpt.Debug {
+		fmt.Printf("CollectHttpInfo\n")
+	}
 	pkg.CollectHttpInfo(result, resp)
 	return
 }
@@ -147,9 +160,15 @@ func systemHttp(result *pkg.Result, scheme string) {
 // 302跳转后目的不可达时进行不redirect的信息收集
 // 暂时使用不太优雅的方案, 在极少数情况下才会触发, 会多进行一次https的交互.
 func noRedirectHttp(result *pkg.Result, req *http.Request) {
+	if RunOpt.Debug {
+		fmt.Printf("conn\n")
+	}
 	conn := pkg.HttpConnWithNoRedirect(RunOpt.Delay + RunOpt.HttpsDelay)
 	req.Header = headers
 	resp, err := conn.Do(req)
+	if RunOpt.Debug {
+		fmt.Printf("resp\n")
+	}
 	if err != nil {
 		// 有可能存在漏网之鱼, 是tls服务, 但tls的第一个响应为30x, 并30x的目的地址不可达或超时. 则会报错.
 		result.Error = err.Error()
