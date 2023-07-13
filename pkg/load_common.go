@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"encoding/json"
-	"strings"
 
 	"separa/common/utils"
 
@@ -63,60 +62,4 @@ func LoadExtractor() {
 			}
 		}
 	}
-}
-
-func LoadWorkFlow() WorkflowMap {
-	var workflows []*Workflow
-	var err error
-	err = json.Unmarshal(LoadConfig("workflow"), &workflows)
-	if err != nil {
-		iutils.Fatal("workflow load FAIL, " + err.Error())
-	}
-
-	// 设置默认参数
-	for _, w := range workflows {
-		// 参数默认值
-		if w.IpProbe == "" {
-			w.IpProbe = Default
-		}
-		if w.SmartProbe == "" {
-			w.SmartProbe = Default
-		}
-		if w.Ports == "" {
-			w.Ports = "top1"
-		}
-		if w.Mod == "" {
-			w.Mod = Default
-		}
-		if w.File == "" {
-			w.File = "auto"
-		}
-		//if w.Path == "" {
-		//	w.Path = "."
-		//}
-		if w.Exploit == "" {
-			w.Exploit = "none"
-		}
-	}
-
-	var tmpmap = make(map[string][]*Workflow)
-	for _, workflow := range workflows {
-		tmpmap[strings.ToLower(workflow.Name)] = append(tmpmap[strings.ToLower(workflow.Name)], workflow)
-		for _, tag := range workflow.Tags {
-			tmpmap[strings.ToLower(tag)] = append(tmpmap[strings.ToLower(tag)], workflow)
-		}
-	}
-	return tmpmap
-}
-
-type WorkflowMap map[string][]*Workflow
-
-func (m WorkflowMap) Choice(name string) []*Workflow {
-	var workflows []*Workflow
-	name = strings.TrimSpace(name)
-	names := strings.Split(name, ",")
-	for _, n := range names {
-		workflows = append(workflows, m[strings.ToLower(n)]...)
-	}
-	return workflows
 }

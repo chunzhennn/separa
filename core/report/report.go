@@ -123,7 +123,7 @@ func AppendDeviceinfo(ip string, deviceinfo string) {
 func Save() {
 	data, err := json.MarshalIndent(ResultKV.KV, "", "    ")
 	if err != nil {
-		log.Log.Printf("Error: %s", err)
+		log.Err("Error: %s", err)
 		return
 	}
 	path := filepath.FromSlash(common.Setting.Output)
@@ -132,13 +132,13 @@ func Save() {
 	if os.IsNotExist(err) {
 		err := os.MkdirAll(dir, 0755)
 		if err != nil {
-			log.Log.Printf("Error: %s", err)
+			log.Err("Error: %s", err)
 			return
 		}
 	}
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Log.Printf("Error: %s", err)
+		log.Err("Error: %s", err)
 		return
 	}
 	defer file.Close()

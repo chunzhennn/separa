@@ -30,9 +30,9 @@ func main() {
 	ConfigInit()
 
 	// Then we start the main process
-	run.Start(&flag.Targets)
+	run.Start()
 
 	// Finally we print the elapsed time
 	elapsed := time.Since(startTime)
-	log.Log.Printf("All tasks down, costs %s", elapsed)
+	log.Out("All tasks down, costs %s", elapsed)
 }

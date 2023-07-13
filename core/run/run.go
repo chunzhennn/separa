@@ -23,7 +23,7 @@ const (
 )
 
 // main entry point
-func Start(targets *[]string) {
+func Start() {
 	var wg = &sync.WaitGroup{}
 	wg.Add(scannerNum)
 
@@ -32,9 +32,9 @@ func Start(targets *[]string) {
 	go watchDog()
 
 	// run the scanner
-	log.Log.Printf("IPScanner start")
+	log.Out("IPScanner start")
 	go IPScanner.Run()
-	log.Log.Printf("ProtoScanner start")
+	log.Out("ProtoScanner start")
 	go ProtoScanner.Run()
 	time.Sleep(time.Second * 1)
 
@@ -53,7 +53,7 @@ func IPScannerInit(wg *sync.WaitGroup) {
 	config.Timeout = 200 * time.Millisecond
 	IPScanner = scanner.NewIPScanner(config, 255)
 	IPScanner.HandlerActive = func(addr net.IP) {
-		log.Log.Printf("IPScanner active: %s", addr.String())
+		log.Out("IPScanner active: %s", addr.String())
 		// report.PushIP(addr.String())
 		for _, port := range common.Setting.Port {
 			ProtoScanner.Push(addr, port)
@@ -110,7 +110,7 @@ func watchDog() {
 		nIP := IPScanner.RunningThreads()
 		nPort := ProtoScanner.RunningThreads()
 		warn := fmt.Sprintf("当前存活协程数：IP：%d 个，Port：%d 个", nIP, nPort)
-		log.Log.Println(warn)
+		log.Out(warn)
 	}
 }
 
@@ -119,14 +119,14 @@ func checkStop() {
 		time.Sleep(time.Second * 2)
 		if IPScanner.RunningThreads() == 0 && !IPScanner.IsDone() {
 			IPScanner.Stop()
-			log.Log.Printf("IPScanner finish")
+			log.Out("IPScanner finish")
 		}
 		if !IPScanner.IsDone() {
 			continue
 		}
 		if ProtoScanner.RunningThreads() == 0 && !ProtoScanner.IsDone() {
 			ProtoScanner.Stop()
-			log.Log.Printf("ProtoScanner finish")
+			log.Out("ProtoScanner finish")
 		}
 	}
 }

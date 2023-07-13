@@ -2,11 +2,11 @@ package plugin
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
 
+	"separa/common/log"
 	"separa/pkg"
 
 	"github.com/chainreactors/logs"
@@ -107,27 +107,20 @@ func systemHttp(result *pkg.Result, scheme string) {
 		}
 	}
 
-	// target += uri
-	if RunOpt.Debug {
-		fmt.Printf("redirect to %s\n", target)
-	}
+	log.Dbg("redirect to %s", target)
 
 	conn := result.GetHttpConn(RunOpt.Delay + RunOpt.HttpsDelay)
 	req, _ := http.NewRequest("GET", target, nil)
 	req.Header = headers
 	resp, err := conn.Do(req)
 	if err != nil {
-		if RunOpt.Debug {
-			fmt.Printf("request %s , %s\n", target, err.Error())
-		}
+		log.Dbg("request %s , %s\n", target, err.Error())
 		// 有可能存在漏网之鱼, 是tls服务, 但tls的第一个响应为30x, 并30x的目的地址不可达或超时. 则会报错.
 		result.Error = err.Error()
 		noRedirectHttp(result, req)
 		return
 	}
-	if RunOpt.Debug {
-		fmt.Printf("request %s , %d\n", target, resp.StatusCode)
-	}
+	log.Dbg("request %s , %d\n", target, resp.StatusCode)
 	if resp.StatusCode == 101 {
 		result.Protocol = "websocket"
 		return
@@ -150,9 +143,6 @@ func systemHttp(result *pkg.Result, scheme string) {
 	}
 
 	result.Error = ""
-	if RunOpt.Debug {
-		fmt.Printf("CollectHttpInfo\n")
-	}
 	pkg.CollectHttpInfo(result, resp)
 	return
 }
@@ -160,15 +150,9 @@ func systemHttp(result *pkg.Result, scheme string) {
 // 302跳转后目的不可达时进行不redirect的信息收集
 // 暂时使用不太优雅的方案, 在极少数情况下才会触发, 会多进行一次https的交互.
 func noRedirectHttp(result *pkg.Result, req *http.Request) {
-	if RunOpt.Debug {
-		fmt.Printf("conn\n")
-	}
 	conn := pkg.HttpConnWithNoRedirect(RunOpt.Delay + RunOpt.HttpsDelay)
 	req.Header = headers
 	resp, err := conn.Do(req)
-	if RunOpt.Debug {
-		fmt.Printf("resp\n")
-	}
 	if err != nil {
 		// 有可能存在漏网之鱼, 是tls服务, 但tls的第一个响应为30x, 并30x的目的地址不可达或超时. 则会报错.
 		result.Error = err.Error()

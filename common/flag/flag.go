@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"separa/common/log"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -61,7 +60,7 @@ func Parse() (ctx *kong.Context) {
 	// Check if target is empty
 	CheckTarget()
 
-	log.Log.Printf("Args Load: %+v", Command)
+	fmt.Printf("Args Load: %+v\n", Command)
 
 	if Command.Target != "" {
 		Targets = append(Targets, Command.Target)
@@ -70,7 +69,7 @@ func Parse() (ctx *kong.Context) {
 	if Command.TargetFile != "" {
 		content, err := ioutil.ReadFile(Command.TargetFile)
 		if err != nil {
-			log.Log.Fatalf("Read target file error: %s", err)
+			fmt.Printf("Read target file error: %s\n", err)
 			return ctx
 		}
 		lines := strings.Split(string(content), "\n")
@@ -79,7 +78,7 @@ func Parse() (ctx *kong.Context) {
 		}
 	}
 
-	defer log.Log.Printf("%d CIDR Load", len(Targets))
+	defer fmt.Printf("%d CIDR Load\n", len(Targets))
 
 	return ctx
 }

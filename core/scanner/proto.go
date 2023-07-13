@@ -3,7 +3,6 @@ package scanner
 import (
 	"fmt"
 	"net"
-	"net/url"
 	"separa/common/log"
 	"separa/core/plugin"
 	"separa/core/report"
@@ -12,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/chainreactors/logs"
-	"github.com/lcvvvv/appfinger"
 )
 
 type ProtoScanner struct {
@@ -22,23 +20,6 @@ type ProtoScanner struct {
 type ipPort struct {
 	addr net.IP
 	port int
-}
-
-func AppFingerParse(result *pkg.Result) *appfinger.FingerPrint {
-	var banner *appfinger.Banner
-	var finger *appfinger.FingerPrint
-	var err error
-	URLRaw := fmt.Sprintf("%s://%s:%s", result.Protocol, result.Ip, result.Port)
-	URL, _ := url.Parse(URLRaw)
-	if result.Protocol == "http" || result.Protocol == "https" {
-		banner, err = appfinger.GetBannerWithURL(URL, nil, result.HttpConn)
-		if err != nil {
-			log.Log.Println(err)
-			return nil
-		}
-		finger = appfinger.Search(URL, banner)
-	}
-	return finger
 }
 
 func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
@@ -52,15 +33,9 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 		plugin.Dispatch(result)
 		// 如果扫到东西了
 		if result.Open {
-			s := fmt.Sprintf("[+] %s\tMidware: %s\tLanguage: %s\tFrameworks: %s\tHost: %s [status: %s] Title: %s %s\n", result.GetURL(), result.Midware, result.Language, logs.Blue(result.Frameworks.String()), result.Host, logs.Yellow(result.Status), logs.Blue(result.Title), logs.Red(result.Vulns.String()))
-			log.Log.Printf(s)
-			// fmt.Printf("Result: %+v\n", result)
-			// if len(result.Content) < 100 {
-			if plugin.RunOpt.Debug {
-				fmt.Print(string(result.Content))
-			}
-
-			// }
+			s := fmt.Sprintf("%s\tMidware: %s\tLanguage: %s\tFrameworks: %s\tHost: %s [status: %s] Title: %s %s\n", result.GetURL(), result.Midware, result.Language, logs.Blue(result.Frameworks.String()), result.Host, logs.Yellow(result.Status), logs.Blue(result.Title), logs.Red(result.Vulns.String()))
+			log.Out(s)
+			log.Dbg(string(result.Content))
 
 			port, _ := strconv.Atoi(result.Port)
 			Protocol := result.Protocol
