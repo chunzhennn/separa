@@ -13,24 +13,11 @@ type Config struct {
 	Output  string
 	Threads int
 	Timeout time.Duration
-
-	//fofa
-	Fofa           []string
-	FofaFixKeyword string
-	FofaSize       int
-	Scan           bool
 }
 
 var Setting Config
 
-func ConfigInit() {
-	Setting = New()
-	Setting.Target = flag.Targets
-	Setting.Output = flag.Command.OutputFile
-	Setting.loadPort(flag.Command.Port)
-}
-
-func (c *Config) loadPort(ports string) {
+func (c *Config) LoadPort(ports string) {
 
 	if ports == "" {
 		return

@@ -7,13 +7,6 @@ import (
 	"net"
 )
 
-func IsIp(ip string) bool {
-	if net.ParseIP(ip) != nil {
-		return true
-	}
-	return false
-}
-
 func MaskToIPv4(mask int) *IP {
 	subnetMask := make([]byte, net.IPv4len) // 创建长度为4的字节数组
 	for i := 0; i < mask; i++ {
@@ -95,9 +88,6 @@ func ParseIP(s string) *IP {
 	return nil
 }
 
-//func NewIP(ipint uint) *IP {
-//	return &IP{IP: net.IP{byte(ipint >> 24), byte(ipint >> 16), byte(ipint >> 8), byte(ipint)}, Ver: 4}
-//}
 func NewIP(ip net.IP) *IP {
 	i := &IP{IP: ip}
 	if len(i.IP) == net.IPv4len {

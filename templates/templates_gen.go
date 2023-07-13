@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/chainreactors/files"
-	"github.com/chainreactors/parsers"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
-	"sigs.k8s.io/yaml"
 	"strings"
+
+	"github.com/chainreactors/files"
+	"github.com/chainreactors/parsers"
+	"sigs.k8s.io/yaml"
 )
 
 var (
@@ -181,7 +182,7 @@ func main() {
 	flag.Parse()
 
 	if *need == "gogo" {
-		needs = []string{"tcp", "http", "port", "workflow", "nuclei", "extract"}
+		needs = []string{"tcp", "http", "port", "extract"}
 	} else if *need == "spray" {
 		needs = []string{"http", "rule", "mask", "extract"}
 	} else {

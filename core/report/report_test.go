@@ -38,7 +38,7 @@ type config struct {
 func TestYaml(t *testing.T) {
 
 	// 将 YAML 格式的文本写入文件
-	content, err := ioutil.ReadFile("config.yaml")
+	content, err := ioutil.ReadFile("test.yaml")
 	if err != nil {
 		fmt.Println(err)
 		return

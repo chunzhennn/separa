@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"net"
 	"separa/common"
-	"separa/common/flag"
 	"separa/common/log"
 	"separa/common/uri"
-	"separa/core/plugin"
 	"separa/core/report"
 	"separa/core/scanner"
 	"separa/pkg"
@@ -90,13 +88,9 @@ func ProtoScannerInit(wg *sync.WaitGroup) {
 
 func initialize(wg *sync.WaitGroup) {
 	report.Init()
-	common.ConfigInit()
 	IPScannerInit(wg)
 	ProtoScannerInit(wg)
 
-	plugin.RunOpt.Delay = flag.Command.Delay
-	plugin.RunOpt.HttpsDelay = flag.Command.Delay / 2
-	plugin.RunOpt.Debug = flag.Command.Debug
 	pkg.LoadPortConfig()
 	pkg.LoadExtractor()
 	pkg.AllHttpFingers = pkg.LoadFinger("http")
