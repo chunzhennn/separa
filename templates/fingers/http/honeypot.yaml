@@ -9,3 +9,4 @@
     - regexps:
         body:
           - /static/x.js
+          - /w-logo-blue.png?ver=20131202

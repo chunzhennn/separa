@@ -2,6 +2,7 @@ package common
 
 import (
 	"separa/common/flag"
+	"separa/common/log"
 	"strconv"
 	"strings"
 	"time"
@@ -57,6 +58,14 @@ func (c *Config) LoadPort(ports string) {
 			return
 		}
 	}
+
+	// handle like '80'
+	port, err := strconv.Atoi(ports)
+	if err != nil {
+		log.Err("port error: %s", err.Error())
+		return
+	}
+	c.Port = []int{port}
 }
 
 func New() Config {
