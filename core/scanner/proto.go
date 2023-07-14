@@ -22,6 +22,21 @@ type ipPort struct {
 	port int
 }
 
+func JudgeKippo(result *pkg.Result) bool {
+	conn, err := pkg.NewSocket("tcp", result.GetTarget(), 3)
+	if err != nil {
+		return false
+	}
+	defer conn.Close()
+	send_data := []byte("SSH-1.9-OpenSSH_5.9p1\r\n")
+	res, err := conn.Request(send_data, 1024)
+	if err != nil {
+		return false
+	}
+	resStr := string(res)
+	return strings.Contains(resStr, "bad version")
+}
+
 func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 	ps = &ProtoScanner{
 		client: newConfig(config, threads),
@@ -93,6 +108,10 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 				} else {
 					app[name] = "N"
 				}
+			}
+
+			if Protocol == "ssh" && JudgeKippo(result) {
+				report.AppendHonypot(result.Ip, result.Port+"/kippo")
 			}
 			// 添加语言信息
 			// if result.Language != "" {
