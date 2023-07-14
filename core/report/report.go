@@ -9,10 +9,12 @@ import (
 	"separa/common"
 	"separa/common/log"
 	"strings"
+	"sync"
 	"time"
 )
 
 var ResultKV struct {
+	sync.RWMutex
 	KV map[string]*ResultUnit // Change the map value type to a pointer to ResultUnit
 }
 
@@ -68,11 +70,15 @@ func Init() {
 }
 
 func PushIP(ip string) {
+	ResultKV.Lock()
 	ResultKV.KV[ip] = NewResultUnit()
+	ResultKV.Unlock()
 }
 
 func PushResult(ip string, result *ResultUnit) {
+	ResultKV.Lock()
 	ResultKV.KV[ip] = result
+	ResultKV.Unlock()
 }
 
 func Get(ip string) *ResultUnit {
@@ -80,7 +86,7 @@ func Get(ip string) *ResultUnit {
 }
 
 func AppendService(ip string, service *ServiceUnit) {
-
+	ResultKV.Lock()
 	if ResultKV.KV[ip] == nil {
 		ResultKV.KV[ip] = NewResultUnit()
 	}
@@ -89,10 +95,11 @@ func AppendService(ip string, service *ServiceUnit) {
 		ResultKV.KV[ip].Services = make([]ServiceUnit, 0)
 	}
 	ResultKV.KV[ip].Services = append(ResultKV.KV[ip].Services, *service)
+	ResultKV.Unlock()
 }
 
 func AppendHonypot(ip string, honeypot string) {
-
+	ResultKV.Lock()
 	if ResultKV.KV[ip] == nil {
 		ResultKV.KV[ip] = NewResultUnit()
 	}
@@ -101,10 +108,11 @@ func AppendHonypot(ip string, honeypot string) {
 		ResultKV.KV[ip].Honeypot = make([]string, 0)
 	}
 	ResultKV.KV[ip].Honeypot = append(ResultKV.KV[ip].Honeypot, honeypot)
+	ResultKV.Unlock()
 }
 
 func AppendDeviceinfo(ip string, deviceinfo string) {
-
+	ResultKV.Lock()
 	if ResultKV.KV[ip] == nil {
 		ResultKV.KV[ip] = NewResultUnit()
 	}
@@ -118,6 +126,7 @@ func AppendDeviceinfo(ip string, deviceinfo string) {
 		}
 	}
 	ResultKV.KV[ip].Deviceinfo = append(ResultKV.KV[ip].Deviceinfo, deviceinfo)
+	ResultKV.Unlock()
 }
 
 func Save() {
