@@ -14,7 +14,7 @@ import (
 )
 
 var ResultKV struct {
-	sync.RWMutex
+	sync.Mutex
 	KV map[string]*ResultUnit // Change the map value type to a pointer to ResultUnit
 }
 
@@ -72,13 +72,13 @@ func Init() {
 func PushIP(ip string) {
 	ResultKV.Lock()
 	ResultKV.KV[ip] = NewResultUnit()
-	ResultKV.Unlock()
+	defer ResultKV.Unlock()
 }
 
 func PushResult(ip string, result *ResultUnit) {
 	ResultKV.Lock()
 	ResultKV.KV[ip] = result
-	ResultKV.Unlock()
+	defer ResultKV.Unlock()
 }
 
 func Get(ip string) *ResultUnit {
@@ -95,7 +95,7 @@ func AppendService(ip string, service *ServiceUnit) {
 		ResultKV.KV[ip].Services = make([]ServiceUnit, 0)
 	}
 	ResultKV.KV[ip].Services = append(ResultKV.KV[ip].Services, *service)
-	ResultKV.Unlock()
+	defer ResultKV.Unlock()
 }
 
 func AppendHonypot(ip string, honeypot string) {
@@ -108,11 +108,12 @@ func AppendHonypot(ip string, honeypot string) {
 		ResultKV.KV[ip].Honeypot = make([]string, 0)
 	}
 	ResultKV.KV[ip].Honeypot = append(ResultKV.KV[ip].Honeypot, honeypot)
-	ResultKV.Unlock()
+	defer ResultKV.Unlock()
 }
 
 func AppendDeviceinfo(ip string, deviceinfo string) {
 	ResultKV.Lock()
+	defer ResultKV.Unlock()
 	if ResultKV.KV[ip] == nil {
 		ResultKV.KV[ip] = NewResultUnit()
 	}
@@ -126,7 +127,6 @@ func AppendDeviceinfo(ip string, deviceinfo string) {
 		}
 	}
 	ResultKV.KV[ip].Deviceinfo = append(ResultKV.KV[ip].Deviceinfo, deviceinfo)
-	ResultKV.Unlock()
 }
 
 func Save() {
@@ -156,4 +156,21 @@ func Save() {
 		fmt.Println(err)
 		return
 	}
+}
+
+func Load(output string) error {
+	path := filepath.FromSlash(output)
+	file, err := os.Open(path)
+	if err != nil {
+		log.Err("Error: %s", err)
+		return err
+	}
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&ResultKV.KV)
+	if err != nil {
+		log.Err("Error: %s", err)
+		return err
+	}
+	return nil
 }

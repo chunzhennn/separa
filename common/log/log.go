@@ -13,7 +13,7 @@ func Out(format string, v ...any) {
 }
 
 func Dbg(format string, v ...any) {
-	if flag.Command.Debug {
+	if flag.Command.Scan.Debug {
 		Log.Printf("\x1B[33m[*]\x1B[0m "+format+"\n", v...)
 	}
 }

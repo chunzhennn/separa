@@ -1,8 +1,9 @@
 vendor/
 separa.exe
 separa
+mutipara.exe
+mutipara
 output.json
 .idea/
 outputs/
 out.json
-api/

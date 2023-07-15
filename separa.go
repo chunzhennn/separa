@@ -13,12 +13,12 @@ import (
 func ConfigInit() {
 	common.Setting = common.New()
 	common.Setting.Target = flag.Targets
-	common.Setting.Output = flag.Command.OutputFile
-	common.Setting.LoadPort(flag.Command.Port)
+	common.Setting.Output = flag.Command.Scan.OutputFile
+	common.Setting.LoadPort(flag.Command.Scan.Port)
 
-	plugin.RunOpt.Delay = flag.Command.Delay
-	plugin.RunOpt.HttpsDelay = flag.Command.Delay / 2
-	plugin.RunOpt.Debug = flag.Command.Debug
+	plugin.RunOpt.Delay = flag.Command.Scan.Delay
+	plugin.RunOpt.HttpsDelay = flag.Command.Scan.Delay / 2
+	plugin.RunOpt.Debug = flag.Command.Scan.Debug
 }
 
 func main() {

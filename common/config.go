@@ -29,7 +29,7 @@ func (c *Config) LoadPort(ports string) {
 		portVec := make([]int, 0)
 		for _, port := range strings.Split(ports, ",") {
 			num, err := strconv.Atoi(strings.TrimSpace(port))
-			if err != nil {
+			if err == nil {
 				portVec = append(portVec, num)
 			}
 		}
@@ -71,7 +71,7 @@ func (c *Config) LoadPort(ports string) {
 func New() Config {
 	return Config{
 		Target:  []string{},
-		Port:    TOP_1000[:flag.Command.Top],
+		Port:    TOP_1000[:flag.Command.Scan.Top],
 		Threads: 800,
 		Timeout: 0,
 	}
