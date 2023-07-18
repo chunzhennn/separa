@@ -21,62 +21,44 @@ var headers = http.Header{
 func initScan(result *pkg.Result) {
 	var bs []byte
 	target := result.GetTarget()
-	if pkg.ProxyUrl != nil && strings.HasPrefix(pkg.ProxyUrl.Scheme, "http") {
-		// 如果是http代理, 则使用http库代替socket
-		conn := result.GetHttpConn(RunOpt.Delay)
-		req, _ := http.NewRequest("GET", "http://"+target, nil)
-		resp, err := conn.Do(req)
-		if err != nil {
-			result.Error = err.Error()
-			return
-		}
-		result.Open = true
-		pkg.CollectHttpInfo(result, resp)
-	} else {
-		conn, err := pkg.NewSocket("tcp", target, RunOpt.Delay)
-		//conn, err := pkg.TcpSocketConn(target, RunOpt.Delay)
-		if err != nil {
-			// return open: 0, closed: 1, filtered: 2, noroute: 3, denied: 4, down: 5, error_host: 6, unkown: -1
-			errMsg := err.Error()
-			result.Error = errMsg
-			if RunOpt.Debug {
-				if strings.Contains(errMsg, "refused") {
-					result.ErrStat = 1
-				} else if strings.Contains(errMsg, "timeout") {
-					result.ErrStat = 2
-				} else if strings.Contains(errMsg, "no route to host") {
-					result.ErrStat = 3
-				} else if strings.Contains(errMsg, "permission denied") {
-					result.ErrStat = 4
-				} else if strings.Contains(errMsg, "host is down") {
-					result.ErrStat = 5
-				} else if strings.Contains(errMsg, "no such host") {
-					result.ErrStat = 6
-				} else if strings.Contains(errMsg, "network is unreachable") {
-					result.ErrStat = 6
-				} else if strings.Contains(errMsg, "The requested address is not valid in its context.") {
-					result.ErrStat = 6
-				} else {
-					result.ErrStat = -1
-				}
+	conn, err := pkg.NewSocket("tcp", target, RunOpt.Delay)
+	if err != nil {
+		// return open: 0, closed: 1, filtered: 2, noroute: 3, denied: 4, down: 5, error_host: 6, unkown: -1
+		errMsg := err.Error()
+		result.Error = errMsg
+		if RunOpt.Debug {
+			if strings.Contains(errMsg, "refused") {
+				result.ErrStat = 1
+			} else if strings.Contains(errMsg, "timeout") {
+				result.ErrStat = 2
+			} else if strings.Contains(errMsg, "no route to host") {
+				result.ErrStat = 3
+			} else if strings.Contains(errMsg, "permission denied") {
+				result.ErrStat = 4
+			} else if strings.Contains(errMsg, "host is down") {
+				result.ErrStat = 5
+			} else if strings.Contains(errMsg, "no such host") {
+				result.ErrStat = 6
+			} else if strings.Contains(errMsg, "network is unreachable") {
+				result.ErrStat = 6
+			} else if strings.Contains(errMsg, "The requested address is not valid in its context.") {
+				result.ErrStat = 6
+			} else {
+				result.ErrStat = -1
 			}
-			return
 		}
-		defer conn.Close()
-		result.Open = true
+		return
+	}
+	defer conn.Close()
+	result.Open = true
 
-		// 启发式扫描探测直接返回不需要后续处理
-		if result.SmartProbe {
-			return
-		}
-		result.Status = "tcp"
+	result.Status = "tcp"
 
-		bs, err = conn.Read(1)
-		if err != nil {
-			systemHttp(result, "http")
-		} else {
-			pkg.CollectSocketInfo(result, bs)
-		}
+	bs, err = conn.Read(1)
+	if err != nil {
+		systemHttp(result, "http")
+	} else {
+		pkg.CollectSocketInfo(result, bs)
 	}
 
 	//所有30x,400,以及非http协议的开放端口都送到http包尝试获取更多信息
@@ -91,7 +73,6 @@ func initScan(result *pkg.Result) {
 // 使用net/http进行带redirect的请求
 func systemHttp(result *pkg.Result, scheme string) {
 
-	// 如果是400或者不可识别协议,则使用https
 	target := scheme + "://" + result.GetTarget()
 	re, _ := regexp.Compile("location: (.*)\r\n")
 	location := re.FindSubmatch(result.Content)

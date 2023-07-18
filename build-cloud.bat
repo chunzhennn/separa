@@ -2,6 +2,6 @@
 go generate
 
 cd ./cloud
-go build -ldflags="-s -w " -o mutipara.exe
+go build -ldflags="-s -w " -o multipara.exe
 
-move ./mutipara.exe ../mutipara.exe
+move ./multipara.exe ../multipara.exe

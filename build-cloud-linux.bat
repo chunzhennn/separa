@@ -4,6 +4,6 @@ SET GOARCH=amd64
 SET GOOS=linux
 cd ./cloud
 
-go build -ldflags="-s -w " -o mutipara
+go build -ldflags="-s -w " -o multipara
 
-move ./mutipara ../mutipara
+move ./multipara ../multipara

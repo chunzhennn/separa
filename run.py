@@ -34,4 +34,4 @@ if __name__ == '__main__':
         elif system == 'Linux':
             bin_path = linux_bin
         command = [bin_path, "scan", "-t", target, "-o", output, "-d", "5", "-n", "800"]
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)

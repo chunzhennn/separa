@@ -22,7 +22,7 @@ func Parse() {
 	)
 
 	if ctx.Command() != "cloud" {
-		fmt.Println("mutipara cann't use 'cloud' command!")
+		fmt.Println("multipara cann't use 'cloud' command!")
 		os.Exit(0)
 	}
 }
