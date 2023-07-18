@@ -4,6 +4,7 @@ import (
 	"net"
 	"separa/common/osping"
 	"separa/common/tcpping"
+	"separa/core/report"
 )
 
 type IPScanner struct {
@@ -28,11 +29,13 @@ func NewIPScanner(config *Config, threads int) (ips *IPScanner) {
 		}
 		// 调用系统 ping 进行探测
 		if osping.Ping(ip.String()) {
+			report.PushIP(ip.String())
 			ips.HandlerActive(ip)
 			return
 		}
 		// 调用 tcp ping 进行探测，使用端口：22, 23, 80, 139, 512, 443, 445, 3389
 		if err := tcpping.PingPorts(ip.String(), config.Timeout); err == nil {
+			report.PushIP(ip.String())
 			ips.HandlerActive(ip)
 			return
 		}
