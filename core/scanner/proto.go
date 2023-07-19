@@ -60,9 +60,9 @@ func NewProtoScanner(config *Config, threads int) (ps *ProtoScanner) {
 			// 遍历所有的指纹信息
 			for _, v := range result.Frameworks {
 				// 如果是猜测的，那么就跳过
-				// if v.IsGuess() {
-				// 	continue
-				// }
+				if v.IsGuess() {
+					continue
+				}
 
 				name := strings.ToLower(v.Name)
 				// version := v.Version
