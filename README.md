@@ -1,6 +1,8 @@
 # parascan
 
-一个疯狂抄袭的扫描器
+一个疯狂抄袭的扫描器（x
+
+separa 使用go编写，集成了kscan、潮汐、gogo的指纹库，基于kscan提供的底层协程调度架构开发，引入了pool来进行并行扫描。
 
 ```text
 Usage: separa
